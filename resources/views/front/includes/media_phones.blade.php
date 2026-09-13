@@ -21,7 +21,7 @@
 </div>
 
 {{-- Images panel --}}
-<div class="phones" data-panel="i" hidden>
+<div class="phones" data-panel="i" style="display:none">
   @for($p = 0; $p < 5; $p++)
   @php $item = $images->get($p); @endphp
   <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}">
@@ -35,7 +35,7 @@
 </div>
 
 {{-- Websites panel --}}
-<div class="phones" data-panel="w" hidden>
+<div class="phones" data-panel="w" style="display:none">
   @for($p = 0; $p < 5; $p++)
   @php $item = $websites->get($p); @endphp
   <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}">

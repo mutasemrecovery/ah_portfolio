@@ -276,7 +276,7 @@ document.querySelectorAll('[data-tabs]').forEach(function (tabs) {
             });
             var parent = tabs.parentElement;
             parent.querySelectorAll('[data-panel]').forEach(function (panel) {
-                panel.hidden = panel.dataset.panel !== tab;
+                panel.style.display = panel.dataset.panel === tab ? '' : 'none';
             });
         });
     });
