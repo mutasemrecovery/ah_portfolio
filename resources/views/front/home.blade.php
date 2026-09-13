@@ -1,5 +1,5 @@
 @extends('layouts.front')
-@section('title', __('front.page_title'))
+@section('title', 'AH Group')
 
 @section('content')
 
