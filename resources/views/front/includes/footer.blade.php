@@ -48,7 +48,7 @@
                 </svg>
             </span>
 
-            <a href="tel:{{ $phone }}">
+            <a dir="ltr" href="tel:{{ $phone }}">
                 {{ $phone }}
             </a>
         </p>
