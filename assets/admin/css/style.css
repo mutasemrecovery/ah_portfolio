@@ -417,6 +417,21 @@ ul { list-style: none; }
 }
 .btn-outline-sm:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
+/* ── Icon action buttons (table rows) ───────────────────────── */
+.btn-icon-sm {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 8px;
+    font-size: .9rem; border: 1px solid var(--border);
+    background: var(--card); color: var(--muted);
+    cursor: pointer; transition: var(--tr);
+    text-decoration: none; padding: 0;
+    font-family: inherit;
+}
+.btn-icon-sm:hover   { background: var(--bg); color: var(--text); border-color: var(--muted); }
+.btn-edit:hover      { background: rgba(36,36,100,.08); color: var(--primary); border-color: var(--primary); }
+.btn-delete:hover    { background: #fee2e2; color: #dc2626; border-color: #dc2626; }
+.btn-view:hover      { background: rgba(250,171,69,.12); color: var(--accent); border-color: var(--accent); }
+
 /* ── Footer ──────────────────────────────────────────────────── */
 .main-footer {
     padding: 16px 24px;
