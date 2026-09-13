@@ -38,6 +38,18 @@ return [
     'settings'             => 'الإعدادات',
     'sign_out'             => 'تسجيل الخروج',
     'collapse_sidebar'     => 'طيّ الشريط الجانبي',
+    'toggle_sidebar'       => 'تبديل الشريط الجانبي',
+    'search_placeholder'   => 'بحث…',
+    'notifications'        => 'الإشعارات',
+    'administrator'        => 'مدير النظام',
+    'employee'             => 'موظف',
+    'my_profile'           => 'ملفي الشخصي',
+    'site_content'         => 'محتوى الموقع',
+    'hero_section'         => 'قسم Hero',
+    'about_section'        => 'قسم About',
+    'agencies'             => 'الوكالات',
+    'clients'              => 'العملاء',
+    'employees'            => 'الموظفون',
 
     // ── Admin Login Page ──────────────────────────────────────────
     'admin_login_title'      => 'دخول المدير',

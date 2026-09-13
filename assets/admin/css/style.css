@@ -1,21 +1,26 @@
 /* ================================================================
-   Admin Panel — EduPlatform
-   Theme: Blue  (#2563eb)
+   Admin Panel — AH.GROUP
+   Theme: Navy (#242464) + Amber (#faab45)
 ================================================================ */
 
 :root {
-    --primary:          #2563eb;
-    --primary-dark:     #1d4ed8;
-    --primary-light:    #eff6ff;
-    --primary-rgb:      37, 99, 235;
+    --primary:          #242464;
+    --primary-dark:     #1a1a4e;
+    --primary-light:    rgba(250, 171, 69, .10);
+    --primary-rgb:      36, 36, 100;
+
+    --accent:           #faab45;
+    --accent-dark:      #e09535;
+    --accent-soft:      rgba(250, 171, 69, .12);
+    --accent-glow:      rgba(250, 171, 69, .35);
 
     --sidebar-width:    260px;
     --navbar-h:         64px;
     --sidebar-bg:       #0f172a;
     --sidebar-text:     #94a3b8;
     --sidebar-hover:    rgba(255,255,255,0.05);
-    --sidebar-active-bg:rgba(37,99,235,0.15);
-    --sidebar-active:   #60a5fa;
+    --sidebar-active-bg:rgba(250, 171, 69, .12);
+    --sidebar-active:   #faab45;
     --sidebar-border:   rgba(255,255,255,0.06);
 
     --bg:       #f1f5f9;
@@ -87,7 +92,7 @@ ul { list-style: none; }
     font-size: 1rem; font-weight: 700; letter-spacing: -.02em;
     color: #f1f5f9; white-space: nowrap;
 }
-.brand-text span { color: #60a5fa; }
+.brand-text span { color: var(--accent); }
 
 /* Nav scroll area */
 .sidebar-nav {
@@ -131,7 +136,7 @@ ul { list-style: none; }
     position: absolute;
     left: -8px; top: 20%; bottom: 20%;
     width: 3px;
-    background: var(--primary);
+    background: var(--accent);
     border-radius: 0 4px 4px 0;
 }
 
@@ -139,7 +144,7 @@ ul { list-style: none; }
 
 .nav-badge {
     margin-left: auto;
-    background: var(--primary); color: #fff;
+    background: var(--accent); color: #fff;
     font-size: .62rem; font-weight: 700;
     padding: 1px 7px; border-radius: 20px;
     line-height: 1.7;
@@ -236,7 +241,7 @@ ul { list-style: none; }
     border-radius: 10px; padding: 7px 14px;
     transition: var(--tr);
 }
-.search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb),.1); }
+.search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .search-box i { color: var(--muted); font-size: .85rem; }
 .search-box input {
     background: none; border: none; outline: none;
@@ -256,7 +261,7 @@ ul { list-style: none; }
     color: var(--muted); transition: var(--tr);
     position: relative; text-decoration: none;
 }
-.icon-btn:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+.icon-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
 .icon-btn .dot {
     position: absolute; top: 8px; right: 8px;
     width: 7px; height: 7px;
@@ -306,7 +311,7 @@ ul { list-style: none; }
 
 .breadcrumb { background: none; padding: 0; margin: 0; }
 .breadcrumb-item { font-size: .78rem; color: var(--muted); }
-.breadcrumb-item.active { color: var(--primary); font-weight: 500; }
+.breadcrumb-item.active { color: var(--accent); font-weight: 500; }
 .breadcrumb-item + .breadcrumb-item::before { color: var(--muted); }
 
 /* ── Stat Cards ──────────────────────────────────────────────── */
@@ -374,14 +379,14 @@ ul { list-style: none; }
 .pill-success { background: #dcfce7; color: #16a34a; }
 .pill-warning { background: #fef9c3; color: #a16207; }
 .pill-danger  { background: #fee2e2; color: #dc2626; }
-.pill-info    { background: #dbeafe; color: #2563eb; }
+.pill-info    { background: rgba(36,36,100,.1); color: var(--primary); }
 .pill-neutral { background: var(--bg);  color: var(--muted); }
 
 /* ── Avatars ─────────────────────────────────────────────────── */
 .avatar {
     display: inline-flex; align-items: center; justify-content: center;
     font-weight: 700; border-radius: 10px;
-    background: var(--primary-light); color: var(--primary);
+    background: var(--accent-soft); color: var(--accent);
     flex-shrink: 0; overflow: hidden;
 }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -391,7 +396,7 @@ ul { list-style: none; }
 
 /* ── Progress Bar ────────────────────────────────────────────── */
 .prog-track { height: 6px; background: var(--bg); border-radius: 20px; overflow: hidden; }
-.prog-fill  { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-dark)); border-radius: 20px; }
+.prog-fill  { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 20px; }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
 .btn-primary-sm {
@@ -401,7 +406,7 @@ ul { list-style: none; }
     display: inline-flex; align-items: center; gap: 6px;
     font-family: inherit;
 }
-.btn-primary-sm:hover { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(var(--primary-rgb),.35); }
+.btn-primary-sm:hover { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(36,36,100,.35); }
 
 .btn-outline-sm {
     background: transparent; border: 1px solid var(--border);
@@ -410,7 +415,7 @@ ul { list-style: none; }
     color: var(--muted); display: inline-flex; align-items: center; gap: 6px;
     font-family: inherit;
 }
-.btn-outline-sm:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.btn-outline-sm:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
 /* ── Footer ──────────────────────────────────────────────────── */
 .main-footer {
@@ -421,7 +426,7 @@ ul { list-style: none; }
     flex-wrap: wrap;
 }
 .footer-links { display: flex; gap: 16px; }
-.footer-links a:hover { color: var(--primary); }
+.footer-links a:hover { color: var(--accent); }
 
 /* ── Activity / Timeline ─────────────────────────────────────── */
 .activity-item {

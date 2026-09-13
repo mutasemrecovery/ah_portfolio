@@ -26,41 +26,41 @@
 
       
         {{-- ── Portfolio Content ────────────────────────────── --}}
-        <div class="nav-label">محتوى الموقع</div>
+        <div class="nav-label">{{ __('messages.site_content') }}</div>
         <ul>
             <li class="nav-item">
                 <a href="{{ route('admin.hero.edit') }}"
                    class="nav-link {{ request()->routeIs('admin.hero.*') ? 'active' : '' }}">
                     <i class="nav-icon bi bi-display"></i>
-                    <span>قسم Hero</span>
+                    <span>{{ __('messages.hero_section') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.about.edit') }}"
                    class="nav-link {{ request()->routeIs('admin.about.*') ? 'active' : '' }}">
                     <i class="nav-icon bi bi-info-circle"></i>
-                    <span>قسم About</span>
+                    <span>{{ __('messages.about_section') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.agencies.index') }}"
                    class="nav-link {{ request()->routeIs('admin.agencies.*') ? 'active' : '' }}">
                     <i class="nav-icon bi bi-buildings"></i>
-                    <span>الوكالات</span>
+                    <span>{{ __('messages.agencies') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.clients.index') }}"
                    class="nav-link {{ request()->routeIs('admin.clients.*') ? 'active' : '' }}">
                     <i class="nav-icon bi bi-people"></i>
-                    <span>العملاء</span>
+                    <span>{{ __('messages.clients') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.site-settings.index') }}"
                    class="nav-link {{ request()->routeIs('admin.site-settings.*') ? 'active' : '' }}">
                     <i class="nav-icon bi bi-sliders"></i>
-                    <span>إعدادات الموقع</span>
+                    <span>{{ __('messages.site_settings') }}</span>
                 </a>
             </li>
         </ul>
@@ -84,7 +84,7 @@
                 <a href="{{ route('admin.employee.index') }}"
                    class="nav-link {{ request()->routeIs('admin.employee.*') ? 'active' : '' }}">
                     <i class="nav-icon bi bi-people"></i>
-                    <span>الموظفون</span>
+                    <span>{{ __('messages.employees') }}</span>
                 </a>
             </li>
             @endif

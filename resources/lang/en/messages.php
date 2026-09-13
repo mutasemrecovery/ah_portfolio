@@ -40,6 +40,18 @@ return [
     'settings'             => 'Settings',
     'sign_out'             => 'Sign Out',
     'collapse_sidebar'     => 'Collapse Sidebar',
+    'toggle_sidebar'       => 'Toggle Sidebar',
+    'search_placeholder'   => 'Search…',
+    'notifications'        => 'Notifications',
+    'administrator'        => 'Administrator',
+    'employee'             => 'Employee',
+    'my_profile'           => 'My Profile',
+    'site_content'         => 'Site Content',
+    'hero_section'         => 'Hero Section',
+    'about_section'        => 'About Section',
+    'agencies'             => 'Agencies',
+    'clients'              => 'Clients',
+    'employees'            => 'Employees',
 
     // ── Admin Login Page ──────────────────────────────────────────
     'admin_login_title'      => 'Admin Login',
