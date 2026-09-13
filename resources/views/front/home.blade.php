@@ -25,8 +25,8 @@
   </div>
 
   <div class="hero__copy reveal">
-    <h1 class="display">{{ $hero?->{'title_' . $locale} ?? $hero?->title_en ?? 'House Of Brands' }}</h1>
-    <p class="hero__sub">{{ $hero?->{'subtitle_' . $locale} ?? $hero?->subtitle_en ?? 'We Empower Innovation, Marketing & Tech' }}</p>
+    <h1 class="display">{{ $hero?->{'title_' . $locale} ?? $hero?->title_en ?? __('front.hero_title') }}</h1>
+    <p class="hero__sub">{{ $hero?->{'subtitle_' . $locale} ?? $hero?->subtitle_en ?? __('front.hero_subtitle') }}</p>
     <a href="{{ $hero?->cta_link ?? '#agencies' }}" class="btn btn--orange btn--lg">
       {{ $hero?->{'cta_text_' . $locale} ?? $hero?->cta_text_en ?? __('front.hero_cta') }}
     </a>
@@ -56,7 +56,7 @@
       <div class="agcard__logo">
         <span class="ph ph--wide" data-label="IMAGE — Agency logo"></span>
       </div>
-      <p class="agcard__desc">A SPECIALIZED COMPANY OFFERING COMPREHENSIVE DIGITAL SERVICES</p>
+      <p class="agcard__desc">{{ __('front.agency_default_desc') }}</p>
     </article>
     @endforelse
   </div>
@@ -79,7 +79,7 @@
     </div>
 
     <div class="about__text reveal">
-      <h2 class="about__title">{{ $about?->{'title_' . $locale} ?? $about?->title_en ?? 'About US' }}</h2>
+      <h2 class="about__title">{{ $about?->{'title_' . $locale} ?? $about?->title_en ?? __('front.about_title') }}</h2>
       @if($about)
         @foreach(explode("\n", trim($about->{'body_' . $locale} ?? $about->body_en)) as $para)
           @if(trim($para))
@@ -87,9 +87,9 @@
           @endif
         @endforeach
       @else
-        <p>AH GROUP is a leading group of companies established in Jordan with the purpose of uniting specialized companies under one umbrella, offering integrated solutions in marketing, technology, production, and business entrepreneurship.</p>
-        <p>The group includes successful companies such as Recovery Jo and Experts World for Marketing, and continuously seeks expansion by launching new companies in various sectors.</p>
-        <p>We believe the group's strength lies in its diversity, service integration, and teamwork that combines innovation, high performance, and strategic vision.</p>
+        <p>{{ __('front.about_p1') }}</p>
+        <p>{{ __('front.about_p2') }}</p>
+        <p>{{ __('front.about_p3') }}</p>
       @endif
     </div>
   </div>
@@ -186,7 +186,7 @@
           @elseif($item && $item->thumbnail)
             <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
           @else
-            <span class="ph ph--phone" data-label="{{ $p === 2 ? 'Featured media' : 'Media' }}"></span>
+            <span class="ph ph--phone" data-label="{{ $p === 2 ? __('front.media_featured') : __('front.media_item') }}"></span>
           @endif
         </div>
         @endfor
@@ -230,7 +230,7 @@
           @elseif($item && $item->thumbnail)
             <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
           @else
-            <span class="ph ph--phone" data-label="{{ $p === 2 ? 'Featured media' : 'Media' }}"></span>
+            <span class="ph ph--phone" data-label="{{ $p === 2 ? __('front.media_featured') : __('front.media_item') }}"></span>
           @endif
         </div>
         @endfor

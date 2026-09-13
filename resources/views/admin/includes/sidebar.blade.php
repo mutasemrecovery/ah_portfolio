@@ -65,32 +65,6 @@
             </li>
         </ul>
 
-        {{-- ── System ────────────────────────────────────────── --}}
-        @if($u?->canAny(['role-table','employee-table','activity-log-table','contact-message-table','setting-edit']))
-        <div class="nav-label">{{ __('messages.system') }}</div>
-        <ul>
-            @if($u?->can('role-table'))
-            <li class="nav-item">
-                <a href="{{ route('admin.role.index') }}"
-                   class="nav-link {{ request()->routeIs('admin.role.*') ? 'active' : '' }}">
-                    <i class="nav-icon bi bi-shield-check"></i>
-                    <span>{{ __('messages.roles_permissions') }}</span>
-                </a>
-            </li>
-            @endif
-
-            @if($u?->can('employee-table'))
-            <li class="nav-item">
-                <a href="{{ route('admin.employee.index') }}"
-                   class="nav-link {{ request()->routeIs('admin.employee.*') ? 'active' : '' }}">
-                    <i class="nav-icon bi bi-people"></i>
-                    <span>{{ __('messages.employees') }}</span>
-                </a>
-            </li>
-            @endif
-
-        </ul>
-        @endif
 
     </nav>
 
