@@ -4,7 +4,10 @@
       "Bash(Get-ChildItem -Path \"c:\\\\xampp\\\\htdocs\\\\ah_portfolio\" -Force)",
       "Bash(Select-Object Name, PSIsContainer)",
       "Bash(dir \"c:\\\\xampp\\\\htdocs\\\\ah_portfolio\\\\resources\\\\lang\\\\en\")",
-      "Bash(dir \"c:\\\\xampp\\\\htdocs\\\\ah_portfolio\\\\lang\")"
+      "Bash(dir \"c:\\\\xampp\\\\htdocs\\\\ah_portfolio\\\\lang\")",
+      "Bash(Get-ChildItem -Path \"c:\\\\xampp\\\\htdocs\\\\ah_portfolio\" -Recurse)",
+      "Bash(Select-Object -Property FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)"
     ]
   }
 }

@@ -121,10 +121,10 @@ section{position:relative}
 .rope i{display:block;width:100%;height:100%;
   background:repeating-linear-gradient(135deg,#8a6b3a 0 6px,#b98f4f 6px 12px);
   border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-.rope::after{content:"";position:absolute;left:50%;bottom:-26px;transform:translateX(-50%);
-  width:42px;height:42px;border:9px solid #4b2fb0;border-radius:50%}
-.rope--l{left:34%}
-.rope--r{right:26%}
+.rope::after{content:"";position:absolute;left:50%;top:-21px;transform:translateX(-50%);
+  width:42px;height:42px;border:9px solid #4b2fb0;border-radius:50%;background:#f5f4ff}
+.rope--l{left:32%}
+.rope--r{right:32%}
 
 /* sign board */
 .sign{
@@ -140,7 +140,7 @@ section{position:relative}
 .sign__hole{position:absolute;top:16px;width:16px;height:16px;border-radius:50%;
   background:#c9ccd6;box-shadow:inset 0 2px 3px rgba(0,0,0,.35)}
 .sign__hole--l{left:16%}
-.sign__hole--r{right:8%}
+.sign__hole--r{right:16%}
 .sign .ph--sign{width:100%;height:100%;border-color:rgba(7,0,72,.22)}
 
 /* octopus */
