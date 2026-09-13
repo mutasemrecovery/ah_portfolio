@@ -747,7 +747,7 @@ section {
 }
 
 .showcase--recovery {
-  background: #fff
+  background: var(--lav)
 }
 
 .showcase--experts {
