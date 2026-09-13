@@ -23,6 +23,7 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'cta_btn_link',    'value_en' => '#contact',            'value_ar' => '#contact'],
             ['key' => 'agencies_title',    'value_en' => 'Our Integrated Agencies', 'value_ar' => 'وكالاتنا المتكاملة'],
             // Decorative images (paths set by admin via upload)
+            ['key' => 'logo_image',        'value_en' => '', 'value_ar' => ''],
             ['key' => 'hero_sign_image',   'value_en' => '', 'value_ar' => ''],
             ['key' => 'hero_octo_image',   'value_en' => '', 'value_ar' => ''],
             ['key' => 'agencies_octo_image','value_en' => '', 'value_ar' => ''],

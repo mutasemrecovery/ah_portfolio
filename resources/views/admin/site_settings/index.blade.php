@@ -83,6 +83,7 @@ $fields = [
 
 @php
 $imageFields = [
+    'logo_image'         => 'Brand Logo (navbar & footer)',
     'hero_sign_image'    => 'Hero — Sign Board (sign__img)',
     'hero_octo_image'    => 'Hero — Octopus Mascot (octo--hero)',
     'agencies_octo_image'=> 'Agencies — Octopus Peeking (octo--peek)',

@@ -1,13 +1,18 @@
 @php
     $locale      = app()->getLocale();
     $brandName   = isset($settings) ? (optional($settings['brand_name'] ?? null)->{'value_' . $locale} ?? 'AH.GROUP') : 'AH.GROUP';
+    $logoPath    = isset($settings) ? (optional($settings['logo_image'] ?? null)->value_en ?? '') : '';
     $navAgencies = isset($agencies) ? $agencies : collect();
 @endphp
 
 <header class="nav" id="nav">
   <div class="nav__inner">
     <a class="brand" href="#top">
-      <span class="ph ph--logo brand__logo" data-label="LOGO — {{ $brandName }} mark" aria-label="{{ $brandName }} logo"></span>
+      @if($logoPath)
+        <img src="{{ asset($logoPath) }}" alt="{{ $brandName }} logo" class="brand__logo">
+      @else
+        <span class="ph ph--logo brand__logo" data-label="LOGO — {{ $brandName }} mark" aria-label="{{ $brandName }} logo"></span>
+      @endif
       <span class="brand__name">{{ $brandName }}</span>
     </a>
     <nav class="nav__links" aria-label="{{ __('front.nav_aria_main') }}">
