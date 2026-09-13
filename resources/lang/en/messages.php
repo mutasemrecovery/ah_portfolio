@@ -31,6 +31,40 @@ return [
 
 
     
+    // ── Sidebar nav ───────────────────────────────────────────────
+    'edu_platform'         => 'AH.GROUP Admin',
+    'main'                 => 'Main',
+    'dashboard'            => 'Dashboard',
+    'system'               => 'System',
+    'roles_permissions'    => 'Roles & Permissions',
+    'settings'             => 'Settings',
+    'sign_out'             => 'Sign Out',
+    'collapse_sidebar'     => 'Collapse Sidebar',
+
+    // ── Admin Login Page ──────────────────────────────────────────
+    'admin_login_title'      => 'Admin Login',
+    'admin_portal'           => 'Admin Portal',
+    'manage_platform_title'  => 'Manage Your',
+    'manage_platform_subtitle' => 'Brand Platform',
+    'manage_platform_desc'   => 'A powerful control panel to manage your agencies, clients, portfolio, and all site content from one place.',
+    'feature_user_roles'     => 'User Roles & Permissions',
+    'feature_courses_lessons'=> 'Agencies & Services',
+    'feature_analytics'      => 'Analytics & Reports',
+    'feature_settings_perms' => 'Settings & Permissions',
+    'students'               => 'Clients',
+    'teachers'               => 'Agencies',
+    'courses'                => 'Services',
+    'secure_access'          => 'Secure Access',
+    'welcome_back_short'     => 'Welcome Back',
+    'sign_in_admin_desc'     => 'Sign in to manage your AH.GROUP platform.',
+    'username_label'         => 'Username',
+    'username_ph'            => 'Enter your username',
+    'password_label'         => 'Password',
+    'password_ph'            => 'Enter your password',
+    'keep_signed_in'         => 'Keep me signed in',
+    'sign_in_admin_btn'      => 'Sign In',
+    'all_rights_reserved'    => 'All rights reserved.',
+
     // ── Site Settings ─────────────────────────────────────────────
     'site_settings'        => 'Site Settings',
     'site_settings_sub'    => 'Control homepage content, social media and app links',
