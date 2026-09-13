@@ -135,7 +135,7 @@
     <div class="marquee__track marquee__track--l">
       @foreach($row1 as $client)
         @if($client->logo)
-          <img src="{{ asset($client->logo) }}" alt="{{ $client->{'name_' . $locale} }}" class="client-logo">
+          <img src="{{ asset($client->logo) }}" alt="{{ $client->{'name_' . $locale} }}" class="client-logo" style="height: 140px">
         @else
           <span class="ph ph--client" data-label="{{ $client->{'name_' . $locale} }}"></span>
         @endif
