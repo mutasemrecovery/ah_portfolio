@@ -10,15 +10,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PermissionSeeder::class,
-            CategorySeeder::class,
-            TawajihhiGradeSeeder::class,
-            SubjectSeeder::class,
-            TeacherSeeder::class,
-            CourseSeeder::class,
-            ExamSeeder::class,
-            ClassesSeeder::class,
-            KindergartenSeeder::class,
-            ConductDocumentSeeder::class,
             SiteSettingSeeder::class,
             HeroSectionSeeder::class,
             AgencySeeder::class,
