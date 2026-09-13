@@ -21,7 +21,14 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'cta_lead',        'value_en' => 'Ready to grow your brand? Let\'s build something great together.', 'value_ar' => 'مستعد لتنمية علامتك التجارية؟ دعنا نبني شيئاً عظيماً معاً.'],
             ['key' => 'cta_btn_text',    'value_en' => 'GET STARTED NOW',     'value_ar' => 'ابدأ الآن'],
             ['key' => 'cta_btn_link',    'value_en' => '#contact',            'value_ar' => '#contact'],
-            ['key' => 'agencies_title',  'value_en' => 'Our Integrated Agencies', 'value_ar' => 'وكالاتنا المتكاملة'],
+            ['key' => 'agencies_title',    'value_en' => 'Our Integrated Agencies', 'value_ar' => 'وكالاتنا المتكاملة'],
+            // Decorative images (paths set by admin via upload)
+            ['key' => 'hero_sign_image',   'value_en' => '', 'value_ar' => ''],
+            ['key' => 'hero_octo_image',   'value_en' => '', 'value_ar' => ''],
+            ['key' => 'agencies_octo_image','value_en' => '', 'value_ar' => ''],
+            ['key' => 'about_octo_image',  'value_en' => '', 'value_ar' => ''],
+            ['key' => 'showcase_octo_image','value_en' => '', 'value_ar' => ''],
+            ['key' => 'cta_octo_image',    'value_en' => '', 'value_ar' => ''],
         ];
 
         foreach ($settings as $s) {

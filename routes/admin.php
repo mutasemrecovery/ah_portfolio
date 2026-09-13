@@ -68,8 +68,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
         // ── Portfolio Content ─────────────────────────────────────────────
         // Site Settings
-        Route::get('site-settings',       [SiteSettingController::class, 'index'])->name('admin.site-settings.index');
-        Route::put('site-settings',       [SiteSettingController::class, 'update'])->name('admin.site-settings.update');
+        Route::get('site-settings',                [SiteSettingController::class, 'index'])->name('admin.site-settings.index');
+        Route::put('site-settings',                [SiteSettingController::class, 'update'])->name('admin.site-settings.update');
+        Route::post('site-settings/images',        [SiteSettingController::class, 'uploadImages'])->name('admin.site-settings.upload-images');
 
         // Hero Section
         Route::get('hero/edit',           [HeroSectionController::class, 'edit'])->name('admin.hero.edit');

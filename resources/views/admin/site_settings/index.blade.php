@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
-@section('title', 'إعدادات الموقع')
+@section('title', __('messages.site_settings'))
 
 @section('content')
 
 <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3">
     <div>
-        <h1 class="page-title">إعدادات الموقع</h1>
-        <p class="page-sub">إدارة معلومات التواصل والروابط الاجتماعية وبيانات الموقع العامة</p>
+        <h1 class="page-title">{{ __('messages.site_settings') }}</h1>
+        <p class="page-sub">{{ __('messages.site_settings_sub') }}</p>
     </div>
 </div>
 
@@ -16,6 +16,7 @@
     </div>
 @endif
 
+{{-- ── Text / URL Settings ──────────────────────────────────────── --}}
 <form action="{{ route('admin.site-settings.update') }}" method="POST">
 @csrf @method('PUT')
 
@@ -36,9 +37,9 @@ $fields = [
 ];
 @endphp
 
-<div class="panel-card">
+<div class="panel-card mb-4">
     <div class="panel-card-header">
-        <h2 class="panel-card-title"><i class="bi bi-sliders"></i> الإعدادات العامة</h2>
+        <h2 class="panel-card-title"><i class="bi bi-sliders"></i> General Settings / الإعدادات العامة</h2>
     </div>
     <div class="panel-card-body">
         <div class="row g-4">
@@ -70,8 +71,65 @@ $fields = [
     </div>
 </div>
 
-<div class="d-flex gap-2 mt-4 pb-4">
-    <button type="submit" class="btn-primary-sm"><i class="bi bi-save"></i> حفظ الإعدادات</button>
+<div class="d-flex gap-2 mb-5">
+    <button type="submit" class="btn-primary-sm"><i class="bi bi-save"></i> Save Settings / حفظ الإعدادات</button>
+</div>
+
+</form>
+
+{{-- ── Decorative Images ────────────────────────────────────────── --}}
+<form action="{{ route('admin.site-settings.upload-images') }}" method="POST" enctype="multipart/form-data">
+@csrf
+
+@php
+$imageFields = [
+    'hero_sign_image'    => 'Hero — Sign Board (sign__img)',
+    'hero_octo_image'    => 'Hero — Octopus Mascot (octo--hero)',
+    'agencies_octo_image'=> 'Agencies — Octopus Peeking (octo--peek)',
+    'about_octo_image'   => 'About — Octopus Sitting (octo--about)',
+    'showcase_octo_image'=> 'Showcase — Octopus (octo--recovery)',
+    'cta_octo_image'     => 'CTA — Octopus with Sign (octo--cta)',
+];
+@endphp
+
+<div class="panel-card mb-4">
+    <div class="panel-card-header">
+        <h2 class="panel-card-title"><i class="bi bi-images"></i> Decorative Images / الصور الزخرفية</h2>
+        <small class="text-muted">Upload images to replace placeholder graphics on the homepage</small>
+    </div>
+    <div class="panel-card-body">
+        <div class="row g-4">
+            @foreach($imageFields as $key => $label)
+            @php $currentPath = $settings[$key]->value_en ?? null; @endphp
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">{{ $label }}</label>
+
+                @if($currentPath)
+                <div class="mb-2">
+                    <img src="{{ asset($currentPath) }}"
+                         alt="{{ $label }}"
+                         class="img-thumbnail d-block"
+                         style="max-height:140px;object-fit:contain;background:#f8f9fa;">
+                </div>
+                @else
+                <div class="mb-2 d-flex align-items-center justify-content-center rounded border"
+                     style="height:100px;background:#f8f9fa;color:#94a3b8;font-size:.78rem;">
+                    No image uploaded
+                </div>
+                @endif
+
+                <input type="file"
+                       name="images[{{ $key }}]"
+                       accept="image/jpeg,image/png,image/webp,image/gif"
+                       class="form-control form-control-sm">
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+<div class="d-flex gap-2 pb-4">
+    <button type="submit" class="btn-primary-sm"><i class="bi bi-cloud-upload"></i> Upload Images / رفع الصور</button>
 </div>
 
 </form>

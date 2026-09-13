@@ -2,6 +2,20 @@
 
 return [
 
+    // ── Navbar ────────────────────────────────────────────────────
+    'nav_aria_main'     => 'Main navigation',
+    'nav_menu_aria'     => 'Menu',
+    'nav_about'         => 'About',
+    'nav_contact'       => 'Contact Us',
+
+    // ── Footer ────────────────────────────────────────────────────
+    'footer_contact'    => 'Contact',
+    'footer_social'     => 'Social',
+
+    // ── Media placeholders ────────────────────────────────────────
+    'media_featured'    => 'Featured media',
+    'media_item'        => 'Media',
+
     // ── Hero ──────────────────────────────────────────────────────
     'hero_title'        => 'House Of Brands',
     'hero_subtitle'     => 'We Empower Innovation, Marketing & Tech',

@@ -32,7 +32,7 @@
   </div>
 
   <div class="footer__col">
-    <h4>SOCIAL</h4>
+    <h4>{{ __('front.footer_social') }}</h4>
     <div class="social">
       <a href="{{ $fbUrl }}" aria-label="Facebook">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.9.3-1.5 1.6-1.5H17V4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V10H7.5v3H10v8z"/></svg>

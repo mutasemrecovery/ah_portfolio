@@ -17,10 +17,18 @@
     <div class="sign" id="sign">
       <div class="sign__hole sign__hole--l"></div>
       <div class="sign__hole sign__hole--r"></div>
-      <span class="ph ph--sign" data-label="IMAGE — Sign board with AH.GROUP logo"></span>
+      @if($setting('hero_sign_image'))
+        <img src="{{ asset($setting('hero_sign_image')) }}" alt="AH.GROUP sign board" class="sign__img">
+      @else
+        <span class="ph ph--sign" data-label="IMAGE — Sign board with AH.GROUP logo"></span>
+      @endif
     </div>
     <div class="octo octo--hero float">
-      <span class="ph ph--octo" data-label="IMAGE — Octopus mascot (orange hoodie)"></span>
+      @if($setting('hero_octo_image'))
+        <img src="{{ asset($setting('hero_octo_image')) }}" alt="AH.GROUP mascot" class="octo__img">
+      @else
+        <span class="ph ph--octo" data-label="IMAGE — Octopus mascot (orange hoodie)"></span>
+      @endif
     </div>
   </div>
 
@@ -62,7 +70,11 @@
   </div>
 
   <div class="octo octo--peek float">
-    <span class="ph ph--octo" data-label="IMAGE — Octopus peeking (front)"></span>
+    @if($setting('agencies_octo_image'))
+      <img src="{{ asset($setting('agencies_octo_image')) }}" alt="" class="octo__img" aria-hidden="true">
+    @else
+      <span class="ph ph--octo" data-label="IMAGE — Octopus peeking (front)"></span>
+    @endif
   </div>
 </section>
 
@@ -95,7 +107,11 @@
   </div>
 
   <div class="octo octo--about float">
-    <span class="ph ph--octo" data-label="IMAGE — Octopus sitting"></span>
+    @if($setting('about_octo_image'))
+      <img src="{{ asset($setting('about_octo_image')) }}" alt="" class="octo__img" aria-hidden="true">
+    @else
+      <span class="ph ph--octo" data-label="IMAGE — Octopus sitting"></span>
+    @endif
   </div>
 </section>
 
@@ -157,84 +173,73 @@
 
 <!-- ================= AGENCY SHOWCASES ================= -->
 @foreach($agencies as $index => $agency)
-@php $isEven = $index % 2 === 0; @endphp
+@php
+  $isEven   = $index % 2 === 0;
+  $videos   = ($agency->media ?? collect())->where('type', 'video')->values();
+  $images   = ($agency->media ?? collect())->where('type', 'image')->values();
+  $websites = ($agency->media ?? collect())->where('type', 'website')->values();
+@endphp
 
 <section class="showcase showcase--{{ $agency->slug }}" id="{{ $agency->slug }}">
   @if($isEven)
   <div class="octo octo--recovery float">
-    <span class="ph ph--octo" data-label="IMAGE — Octopus sitting"></span>
+    @if($setting('showcase_octo_image'))
+      <img src="{{ asset($setting('showcase_octo_image')) }}" alt="" class="octo__img" aria-hidden="true">
+    @else
+      <span class="ph ph--octo" data-label="IMAGE — Octopus sitting"></span>
+    @endif
   </div>
   @endif
 
   <div class="showcase__inner">
     @if($isEven)
+    {{-- Even: content left, media right --}}
     <div class="showcase__left reveal">
-    @else
-    <div class="showcase__right reveal">
-      <div class="tabs" data-tabs>
-        <button class="tabs__btn is-active" data-tab="v">{{ __('front.tab_videos') }}</button>
-        <button class="tabs__btn" data-tab="i">{{ __('front.tab_images') }}</button>
-        <button class="tabs__btn" data-tab="w">{{ __('front.tab_websites') }}</button>
-      </div>
-      <div class="phones">
-        @php $agencyMedia = $agency->media ?? collect(); @endphp
-        @for($p = 0; $p < 5; $p++)
-        @php $item = $agencyMedia->get($p); @endphp
-        <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}">
-          @if($item && $item->file_path)
-            <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
-          @elseif($item && $item->thumbnail)
-            <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
-          @else
-            <span class="ph ph--phone" data-label="{{ $p === 2 ? __('front.media_featured') : __('front.media_item') }}"></span>
-          @endif
-        </div>
-        @endfor
-      </div>
-    </div>
-    <div class="showcase__left showcase__left--right reveal">
-    @endif
 
       @if($agency->logo)
-        <img src="{{ asset($agency->logo) }}" class="showcase__logo {{ !$isEven ? 'showcase__logo--exp' : '' }}" alt="{{ $agency->{'name_' . $locale} }}">
+        <img src="{{ asset($agency->logo) }}" class="showcase__logo" alt="{{ $agency->{'name_' . $locale} }}">
       @else
-        <span class="ph ph--{{ $isEven ? 'wide' : 'sq' }} showcase__logo {{ !$isEven ? 'showcase__logo--exp' : '' }}"
-              data-label="IMAGE — {{ $agency->name_en }} logo"></span>
+        <span class="ph ph--wide showcase__logo" data-label="IMAGE — {{ $agency->name_en }} logo"></span>
       @endif
 
       <h3 class="showcase__heading uline-sm">
         {{ $agency->{'heading_' . $locale} ?? $agency->heading_en ?? $agency->{'name_' . $locale} }}
       </h3>
 
-      <ul class="tick {{ !$isEven ? 'tick--light' : '' }}">
+      <ul class="tick">
         @foreach($agency->services as $service)
           <li>{{ $service->{'title_' . $locale} ?? $service->title_en }}</li>
         @endforeach
       </ul>
     </div>
 
-    @if($isEven)
     <div class="showcase__right reveal">
-      <div class="tabs" data-tabs>
-        <button class="tabs__btn is-active" data-tab="v">{{ __('front.tab_videos') }}</button>
-        <button class="tabs__btn" data-tab="i">{{ __('front.tab_images') }}</button>
-        <button class="tabs__btn" data-tab="w">{{ __('front.tab_websites') }}</button>
-      </div>
-      <div class="phones">
-        @php $agencyMedia = $agency->media ?? collect(); @endphp
-        @for($p = 0; $p < 5; $p++)
-        @php $item = $agencyMedia->get($p); @endphp
-        <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}">
-          @if($item && $item->file_path)
-            <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
-          @elseif($item && $item->thumbnail)
-            <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
-          @else
-            <span class="ph ph--phone" data-label="{{ $p === 2 ? __('front.media_featured') : __('front.media_item') }}"></span>
-          @endif
-        </div>
-        @endfor
-      </div>
+      @include('front.includes.media_phones', compact('videos','images','websites','locale'))
+    </div>
+
+    @else
+    {{-- Odd: media left, content right --}}
+    <div class="showcase__right reveal">
+      @include('front.includes.media_phones', compact('videos','images','websites','locale'))
+    </div>
+
+    <div class="showcase__left showcase__left--right reveal">
+
+      @if($agency->logo)
+        <img src="{{ asset($agency->logo) }}" class="showcase__logo showcase__logo--exp" alt="{{ $agency->{'name_' . $locale} }}">
+      @else
+        <span class="ph ph--sq showcase__logo showcase__logo--exp" data-label="IMAGE — {{ $agency->name_en }} logo"></span>
+      @endif
+
+      <h3 class="showcase__heading uline-sm">
+        {{ $agency->{'heading_' . $locale} ?? $agency->heading_en ?? $agency->{'name_' . $locale} }}
+      </h3>
+
+      <ul class="tick tick--light">
+        @foreach($agency->services as $service)
+          <li>{{ $service->{'title_' . $locale} ?? $service->title_en }}</li>
+        @endforeach
+      </ul>
     </div>
     @endif
   </div>
@@ -244,7 +249,11 @@
 <!-- ================= CTA ================= -->
 <section class="cta" id="contact">
   <div class="octo octo--cta float">
-    <span class="ph ph--octo-sign" data-label="IMAGE — Octopus holding AH.GROUP sign"></span>
+    @if($setting('cta_octo_image'))
+      <img src="{{ asset($setting('cta_octo_image')) }}" alt="" class="octo__img" aria-hidden="true">
+    @else
+      <span class="ph ph--octo-sign" data-label="IMAGE — Octopus holding AH.GROUP sign"></span>
+    @endif
   </div>
   <div class="cta__copy reveal">
     <p class="cta__lead">{{ $setting('cta_lead') ?: __('front.cta_lead') }}</p>
@@ -255,3 +264,22 @@
 </section>
 
 @endsection
+
+@push('scripts')
+<script>
+document.querySelectorAll('[data-tabs]').forEach(function (tabs) {
+    tabs.querySelectorAll('.tabs__btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var tab = this.dataset.tab;
+            tabs.querySelectorAll('.tabs__btn').forEach(function (b) {
+                b.classList.toggle('is-active', b === btn);
+            });
+            var parent = tabs.parentElement;
+            parent.querySelectorAll('[data-panel]').forEach(function (panel) {
+                panel.hidden = panel.dataset.panel !== tab;
+            });
+        });
+    });
+});
+</script>
+@endpush
