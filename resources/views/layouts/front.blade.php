@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<link href="{{ asset('assets_front/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('assets_front/css/style.css') }}?v={{ filemtime(base_path('assets_front/css/style.css')) }}" rel="stylesheet">
 @stack('styles')
 </head>
 <body class="{{ app()->getLocale() === 'en' ? 'lang-en' : 'lang-ar' }}">
