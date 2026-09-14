@@ -746,12 +746,14 @@ section {
   align-items: center
 }
 
-.showcase--even {
+.showcase--even,
+.showcase--recovery {
   background: var(--lav);
   overflow: visible
 }
 
-.showcase--odd {
+.showcase--odd,
+.showcase--experts {
   background: var(--navy);
   color: #eef;
   padding-top: 160px
@@ -779,7 +781,8 @@ section {
   position: relative
 }
 
-.showcase--odd .showcase__heading {
+.showcase--odd .showcase__heading,
+.showcase--experts .showcase__heading {
   color: #fff
 }
 
@@ -798,7 +801,8 @@ section {
   background: linear-gradient(90deg, var(--orange), var(--navy))
 }
 
-.showcase--odd .uline-sm::after {
+.showcase--odd .uline-sm::after,
+.showcase--experts .uline-sm::after {
   background: linear-gradient(90deg, var(--orange), #fff)
 }
 
@@ -841,7 +845,8 @@ section {
   margin-bottom: 34px
 }
 
-.showcase--odd .tabs {
+.showcase--odd .tabs,
+.showcase--experts .tabs {
   border-color: rgba(255, 255, 255, .2)
 }
 
@@ -860,7 +865,8 @@ section {
   transition: opacity .2s
 }
 
-.showcase--odd .tabs__btn {
+.showcase--odd .tabs__btn,
+.showcase--experts .tabs__btn {
   color: #fff
 }
 

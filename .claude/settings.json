@@ -7,7 +7,8 @@
       "Bash(dir \"c:\\\\xampp\\\\htdocs\\\\ah_portfolio\\\\lang\")",
       "Bash(Get-ChildItem -Path \"c:\\\\xampp\\\\htdocs\\\\ah_portfolio\" -Recurse)",
       "Bash(Select-Object -Property FullName, PSIsContainer)",
-      "Bash(Sort-Object FullName)"
+      "Bash(Sort-Object FullName)",
+      "Read(//c/xampp/htdocs\" 2>/dev/**)"
     ]
   }
 }
