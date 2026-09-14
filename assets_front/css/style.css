@@ -730,14 +730,16 @@ section {
 }
 
 /* ============================================================
-   SHOWCASE
+   SHOWCASE SECTIONS
    ============================================================ */
 
-/* ── Base ── */
+/* ─────────────────────────────────────────────────────────────
+   1. BASE — shared by all showcase sections
+   ───────────────────────────────────────────────────────────── */
 .showcase {
   position: relative;
-  padding: 90px 20px;
-  overflow: hidden
+  padding: 80px 20px 100px;
+  overflow: hidden;
 }
 
 .showcase__inner {
@@ -745,56 +747,64 @@ section {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center
+  gap: 64px;
+  align-items: center;
 }
 
-/* ── Recovery (even / lavender) ── */
+/* ─────────────────────────────────────────────────────────────
+   2. RECOVERY — even index, lavender background
+   Class on the <section>: showcase--even  AND  showcase--recovery
+   ───────────────────────────────────────────────────────────── */
 .showcase--even,
 .showcase--recovery {
-  background: var(--lav);
-  overflow: visible
+  background: #c8d4ff;   /* periwinkle lavender — clearly visible */
+  overflow: visible;     /* lets the octopus bleed into the next section */
 }
 
-/* ── Experts (odd / navy) ── */
+/* ─────────────────────────────────────────────────────────────
+   3. EXPERTS — odd index, dark navy background
+   Class on the <section>: showcase--odd  AND  showcase--experts
+   ───────────────────────────────────────────────────────────── */
 .showcase--odd,
 .showcase--experts {
-  background: var(--navy);
-  color: #eef;
-  padding-top: 160px
+  background: #070048;
+  color: #e8eaff;
+  padding-top: 170px;    /* clears the octopus that bleeds in from above */
 }
 
-/* ── Logo ── */
+/* ─────────────────────────────────────────────────────────────
+   4. LOGO
+   ───────────────────────────────────────────────────────────── */
 .showcase__logo {
   display: block;
-  width: 230px;
-  height: 110px;
+  width: auto;
+  max-width: 220px;
+  height: auto;
+  max-height: 90px;
   object-fit: contain;
-  margin-bottom: 22px
+  margin-bottom: 24px;
 }
 
 .showcase__logo--exp {
-  width: 150px;
-  height: 150px
+  max-width: 160px;
+  max-height: 160px;
 }
 
-/* ── Heading ── */
+/* ─────────────────────────────────────────────────────────────
+   5. HEADING + UNDERLINE BAR  (.showcase__heading.uline-sm)
+   ───────────────────────────────────────────────────────────── */
 .showcase__heading {
+  font-family: "Montserrat", sans-serif;
   font-weight: 800;
-  font-size: clamp(20px, 2.4vw, 26px);
-  color: var(--navy);
-  margin-bottom: 34px;
-  position: relative
+  font-size: clamp(18px, 2.2vw, 24px);
+  color: #070048;
+  position: relative;
+  margin-bottom: 30px;
 }
 
-.showcase--odd .showcase__heading,
-.showcase--experts .showcase__heading {
-  color: #fff
-}
-
-/* ── Underline decoration ── */
+/* uline-sm: padding room for the ::after bar */
 .uline-sm {
-  padding-bottom: 14px
+  padding-bottom: 16px;
 }
 
 .uline-sm::after {
@@ -802,89 +812,108 @@ section {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 120px;
+  width: 110px;
   height: 4px;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--orange), var(--navy))
+  background: linear-gradient(90deg, #FBAC43, #070048);
+}
+
+/* Dark section overrides */
+.showcase--odd .showcase__heading,
+.showcase--experts .showcase__heading {
+  color: #ffffff;
 }
 
 .showcase--odd .uline-sm::after,
 .showcase--experts .uline-sm::after {
-  background: linear-gradient(90deg, var(--orange), #fff)
+  background: linear-gradient(90deg, #FBAC43, #ffffff);
 }
 
-/* ── Tick list ── */
+/* ─────────────────────────────────────────────────────────────
+   6. TICK / SERVICES LIST
+   ───────────────────────────────────────────────────────────── */
 .tick {
   list-style: none;
+  margin: 0;
   padding: 0;
-  margin: 0
 }
 
 .tick li {
   position: relative;
   padding-left: 26px;
-  margin: 16px 0;
-  font-size: 17px;
-  color: var(--navy)
+  margin: 14px 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.55;
+  color: #070048;
 }
 
 .tick li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 9px;
-  width: 8px;
-  height: 8px;
+  top: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--navy)
+  background: #070048;
 }
 
+/* Light variant — used inside dark (navy) section */
 .tick--light li {
-  color: #dcd7f2
+  color: #dde3ff;
 }
 
 .tick--light li::before {
-  background: var(--orange)
+  background: #FBAC43;
 }
 
-/* ── Layout helpers ── */
+/* ─────────────────────────────────────────────────────────────
+   7. LAYOUT — odd section puts content on the right
+   ───────────────────────────────────────────────────────────── */
 .showcase__left--right {
-  order: 2
+  order: 2;
 }
 
-/* ── Tabs ── */
+/* ─────────────────────────────────────────────────────────────
+   8. TABS  (Videos / Images / Websites)
+   ───────────────────────────────────────────────────────────── */
 .tabs {
   display: flex;
-  gap: 36px;
-  border-bottom: 2px solid rgba(7, 0, 72, .15);
-  margin-bottom: 34px
+  gap: 32px;
+  border-bottom: 2px solid rgba(7, 0, 72, 0.15);
+  margin-bottom: 32px;
 }
 
+/* Dark section tab border */
 .showcase--odd .tabs,
 .showcase--experts .tabs {
-  border-color: rgba(255, 255, 255, .2)
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .tabs__btn {
   background: none;
-  border: 0;
+  border: none;
   cursor: pointer;
-  padding: 10px 2px;
+  padding: 10px 0;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 16px;
-  letter-spacing: .04em;
-  color: var(--navy);
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #070048;
   position: relative;
-  opacity: .55;
-  transition: opacity .2s
+  opacity: 0.5;
+  transition: opacity 0.2s;
 }
 
+/* Dark section tab text */
 .showcase--odd .tabs__btn,
 .showcase--experts .tabs__btn {
-  color: #fff
+  color: #ffffff;
 }
 
+/* Active indicator bar */
 .tabs__btn::after {
   content: "";
   position: absolute;
@@ -892,126 +921,152 @@ section {
   right: 0;
   bottom: -2px;
   height: 3px;
-  background: var(--orange);
+  border-radius: 2px;
+  background: #FBAC43;
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform .3s
+  transition: transform 0.25s;
 }
 
 .tabs__btn.is-active {
-  opacity: 1
+  opacity: 1;
 }
 
 .tabs__btn.is-active::after {
-  transform: scaleX(1)
+  transform: scaleX(1);
 }
 
-/* ── Phones container ── */
+/* ─────────────────────────────────────────────────────────────
+   9. PHONE MOCKUP CLUSTER
+   ───────────────────────────────────────────────────────────── */
 .phones {
   position: relative;
-  height: 380px;
+  height: 420px;          /* fixed height so the grid cell is tall enough */
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
-/* ── Single phone frame ── */
 .phone {
   position: absolute;
-  border-radius: 26px;
+  border-radius: 28px;
   overflow: hidden;
-  box-shadow: 0 26px 44px -16px rgba(0, 0, 0, .4);
-  transition: transform .5s ease
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.45);
+  transition: transform 0.4s ease;
 }
 
+/* Placeholder pattern when no image is set */
 .phone .ph--phone {
+  display: block;
   width: 100%;
   height: 100%;
-  border-radius: 26px;
-  background: repeating-linear-gradient(45deg, rgba(219,226,255,.65) 0 12px, rgba(219,226,255,.9) 12px 24px);
-  border-color: rgba(7, 0, 72, .3);
-  color: rgba(7, 0, 72, .5)
+  border-radius: 28px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(200, 210, 255, 0.65) 0 12px,
+    rgba(200, 210, 255, 0.92) 12px 24px
+  );
+  border-color: rgba(7, 0, 72, 0.25);
+  color: rgba(7, 0, 72, 0.45);
 }
 
 .phone-media {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block
 }
 
-/* ── Phone positions ── */
+/* ── Phone positions (a=far-left … e=far-right, c=center) ── */
+
+/* Center — largest, front */
 .phone--c {
-  width: 190px;
-  height: 340px;
-  z-index: 5
+  width: 195px;
+  height: 350px;
+  z-index: 5;
 }
 
+/* Inner left */
 .phone--b {
-  width: 150px;
-  height: 270px;
-  left: 12%;
-  top: 40px;
+  width: 155px;
+  height: 280px;
+  left: 10%;
+  top: 38px;
   z-index: 4;
-  transform: rotate(-6deg)
+  transform: rotate(-6deg);
 }
 
+/* Inner right */
 .phone--d {
-  width: 150px;
-  height: 270px;
-  right: 12%;
-  top: 40px;
+  width: 155px;
+  height: 280px;
+  right: 10%;
+  top: 38px;
   z-index: 4;
-  transform: rotate(6deg)
+  transform: rotate(6deg);
 }
 
+/* Outer left */
 .phone--a {
   width: 120px;
-  height: 210px;
-  left: 0;
-  top: 90px;
+  height: 215px;
+  left: -1%;
+  top: 88px;
   z-index: 3;
-  transform: rotate(-10deg)
+  transform: rotate(-11deg);
 }
 
+/* Outer right */
 .phone--e {
   width: 120px;
-  height: 210px;
-  right: 0;
-  top: 90px;
+  height: 215px;
+  right: -1%;
+  top: 88px;
   z-index: 3;
-  transform: rotate(10deg)
+  transform: rotate(11deg);
 }
 
-.phones:hover .phone--b { transform: rotate(-9deg) translateY(-8px) }
-.phones:hover .phone--d { transform: rotate(9deg)  translateY(-8px) }
+/* Hover: inner phones lift slightly */
+.phones:hover .phone--b { transform: rotate(-9deg) translateY(-10px); }
+.phones:hover .phone--d { transform: rotate(9deg)  translateY(-10px); }
 
-/* ── Play overlay on center phone ── */
+/* Play button overlay on center phone */
 .play::after {
   content: "";
   position: absolute;
   inset: 0;
   margin: auto;
-  width: 64px;
-  height: 64px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
-  background: rgba(255,255,255,.35) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M9 7v10l8-5z'/></svg>") center/28px no-repeat;
-  backdrop-filter: blur(2px);
-  z-index: 9
+  background:
+    rgba(255, 255, 255, 0.3)
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M9 7v10l8-5z'/></svg>")
+    center / 26px no-repeat;
+  backdrop-filter: blur(3px);
+  z-index: 9;
 }
 
-/* ── Octopus bleeds from Recovery into Experts ── */
+/* ─────────────────────────────────────────────────────────────
+   10. OCTOPUS — bleeds from Recovery section downward into Experts
+   Parent (.showcase--recovery) has overflow:visible & position:relative
+   ───────────────────────────────────────────────────────────── */
 .octo--recovery {
   position: absolute;
-  left: 1%;
-  bottom: -100px;
-  width: 250px;
-  height: 290px;
-  z-index: 10
+  bottom: -120px;         /* how far the mascot bleeds below Recovery */
+  left: 2%;
+  width: 260px;
+  height: 310px;
+  z-index: 10;
 }
 
+.octo--recovery img,
 .octo--recovery .ph--octo {
-  border-radius: 40px
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 40px;
 }
 
 /* ============================================================
@@ -1262,6 +1317,12 @@ section {
     top: auto;
     bottom: auto;
     transform: none
+  }
+
+  /* Remove the extra top-padding reserved for the bleeding octopus */
+  .showcase--odd,
+  .showcase--experts {
+    padding-top: 80px
   }
 
   .showcase__left--right {
