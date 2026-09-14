@@ -180,7 +180,7 @@
   $websites = ($agency->media ?? collect())->where('type', 'website')->values();
 @endphp
 
-<section class="showcase showcase--{{ $agency->slug }}" id="{{ $agency->slug }}">
+<section class="showcase showcase--{{ $isEven ? 'even' : 'odd' }} showcase--{{ $agency->slug }}" id="{{ $agency->slug }}">
   @if($isEven)
   <div class="octo octo--recovery float">
     @if($setting('showcase_octo_image'))
