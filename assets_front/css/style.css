@@ -730,9 +730,12 @@ section {
 }
 
 /* ============================================================
-   SHOWCASE (Recovery / Experts)
+   SHOWCASE
    ============================================================ */
+
+/* ── Base ── */
 .showcase {
+  position: relative;
   padding: 90px 20px;
   overflow: hidden
 }
@@ -746,12 +749,14 @@ section {
   align-items: center
 }
 
+/* ── Recovery (even / lavender) ── */
 .showcase--even,
 .showcase--recovery {
   background: var(--lav);
   overflow: visible
 }
 
+/* ── Experts (odd / navy) ── */
 .showcase--odd,
 .showcase--experts {
   background: var(--navy);
@@ -759,20 +764,21 @@ section {
   padding-top: 160px
 }
 
+/* ── Logo ── */
 .showcase__logo {
+  display: block;
   width: 230px;
   height: 110px;
+  object-fit: contain;
   margin-bottom: 22px
 }
 
 .showcase__logo--exp {
   width: 150px;
-  height: 150px;
-  background: transparent;
-  border-color: rgba(255, 255, 255, .4);
-  color: rgba(255, 255, 255, .7)
+  height: 150px
 }
 
+/* ── Heading ── */
 .showcase__heading {
   font-weight: 800;
   font-size: clamp(20px, 2.4vw, 26px);
@@ -786,6 +792,7 @@ section {
   color: #fff
 }
 
+/* ── Underline decoration ── */
 .uline-sm {
   padding-bottom: 14px
 }
@@ -806,6 +813,13 @@ section {
   background: linear-gradient(90deg, var(--orange), #fff)
 }
 
+/* ── Tick list ── */
+.tick {
+  list-style: none;
+  padding: 0;
+  margin: 0
+}
+
 .tick li {
   position: relative;
   padding-left: 26px;
@@ -821,8 +835,8 @@ section {
   top: 9px;
   width: 8px;
   height: 8px;
-  background: var(--navy);
-  border-radius: 50%
+  border-radius: 50%;
+  background: var(--navy)
 }
 
 .tick--light li {
@@ -833,11 +847,12 @@ section {
   background: var(--orange)
 }
 
+/* ── Layout helpers ── */
 .showcase__left--right {
   order: 2
 }
 
-/* tabs */
+/* ── Tabs ── */
 .tabs {
   display: flex;
   gap: 36px;
@@ -855,7 +870,7 @@ section {
   border: 0;
   cursor: pointer;
   padding: 10px 2px;
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 16px;
   letter-spacing: .04em;
@@ -891,7 +906,7 @@ section {
   transform: scaleX(1)
 }
 
-/* phones */
+/* ── Phones container ── */
 .phones {
   position: relative;
   height: 380px;
@@ -900,6 +915,7 @@ section {
   align-items: center
 }
 
+/* ── Single phone frame ── */
 .phone {
   position: absolute;
   border-radius: 26px;
@@ -912,7 +928,7 @@ section {
   width: 100%;
   height: 100%;
   border-radius: 26px;
-  background: repeating-linear-gradient(45deg, rgba(219, 226, 255, .65) 0 12px, rgba(219, 226, 255, .9) 12px 24px);
+  background: repeating-linear-gradient(45deg, rgba(219,226,255,.65) 0 12px, rgba(219,226,255,.9) 12px 24px);
   border-color: rgba(7, 0, 72, .3);
   color: rgba(7, 0, 72, .5)
 }
@@ -924,6 +940,7 @@ section {
   display: block
 }
 
+/* ── Phone positions ── */
 .phone--c {
   width: 190px;
   height: 340px;
@@ -966,14 +983,10 @@ section {
   transform: rotate(10deg)
 }
 
-.phones:hover .phone--b {
-  transform: rotate(-9deg) translateY(-8px)
-}
+.phones:hover .phone--b { transform: rotate(-9deg) translateY(-8px) }
+.phones:hover .phone--d { transform: rotate(9deg)  translateY(-8px) }
 
-.phones:hover .phone--d {
-  transform: rotate(9deg) translateY(-8px)
-}
-
+/* ── Play overlay on center phone ── */
 .play::after {
   content: "";
   position: absolute;
@@ -982,11 +995,12 @@ section {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, .35) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M9 7v10l8-5z'/></svg>") center/28px no-repeat;
+  background: rgba(255,255,255,.35) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M9 7v10l8-5z'/></svg>") center/28px no-repeat;
   backdrop-filter: blur(2px);
   z-index: 9
 }
 
+/* ── Octopus bleeds from Recovery into Experts ── */
 .octo--recovery {
   position: absolute;
   left: 1%;
