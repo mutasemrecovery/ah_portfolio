@@ -19,7 +19,6 @@
         @else
             <span class="ph ph--logo" data-label="LOGO"></span>
         @endif
-        <span class="footer__name">{{ $brandName }}</span>
     </div>
 
     <div class="footer__col">

@@ -13,7 +13,6 @@
       @else
         <span class="ph ph--logo brand__logo" data-label="LOGO — {{ $brandName }} mark" aria-label="{{ $brandName }} logo"></span>
       @endif
-      <span class="brand__name">{{ $brandName }}</span>
     </a>
     <nav class="nav__links" aria-label="{{ __('front.nav_aria_main') }}">
       <a href="#about" class="is-active">{{ __('front.nav_about') }}</a>
