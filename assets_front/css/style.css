@@ -734,12 +734,15 @@ section {
    ============================================================ */
 
 /* ─────────────────────────────────────────────────────────────
-   1. BASE — shared by all showcase sections
+   1. BASE — 1st showcase = Recovery (lavender)
+      background & overflow set here so they work even when
+      the HTML has only class="showcase" (old server template).
    ───────────────────────────────────────────────────────────── */
 .showcase {
   position: relative;
   padding: 80px 20px 100px;
-  overflow: hidden;
+  background: #c8d4ff;   /* periwinkle lavender */
+  overflow: visible;     /* octopus bleeds into next section */
 }
 
 .showcase__inner {
@@ -752,24 +755,29 @@ section {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2. RECOVERY — even index, lavender background
-   Class on the <section>: showcase--even  AND  showcase--recovery
+   2. EXPERTS — 2nd showcase (navy dark)
+      Selector A: .showcase + .showcase  → works with old HTML
+                  (just class="showcase", no modifier classes)
+      Selector B: .showcase--odd / .showcase--experts
+                  → works with updated HTML (modifier classes)
    ───────────────────────────────────────────────────────────── */
-.showcase--even,
-.showcase--recovery {
-  background: #c8d4ff;   /* periwinkle lavender — clearly visible */
-  overflow: visible;     /* lets the octopus bleed into the next section */
-}
-
-/* ─────────────────────────────────────────────────────────────
-   3. EXPERTS — odd index, dark navy background
-   Class on the <section>: showcase--odd  AND  showcase--experts
-   ───────────────────────────────────────────────────────────── */
+.showcase + .showcase,
 .showcase--odd,
 .showcase--experts {
   background: #070048;
   color: #e8eaff;
-  padding-top: 170px;    /* clears the octopus that bleeds in from above */
+  padding-top: 170px;    /* clears the octopus bleeding in from above */
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2a. Recovery modifier classes (new HTML) — same as base,
+       but explicit so specificity never causes a regression
+   ───────────────────────────────────────────────────────────── */
+.showcase--even,
+.showcase--recovery {
+  background: #c8d4ff;
+  overflow: visible;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -819,11 +827,13 @@ section {
 }
 
 /* Dark section overrides */
+.showcase + .showcase .showcase__heading,
 .showcase--odd .showcase__heading,
 .showcase--experts .showcase__heading {
   color: #ffffff;
 }
 
+.showcase + .showcase .uline-sm::after,
 .showcase--odd .uline-sm::after,
 .showcase--experts .uline-sm::after {
   background: linear-gradient(90deg, #FBAC43, #ffffff);
@@ -886,6 +896,7 @@ section {
 }
 
 /* Dark section tab border */
+.showcase + .showcase .tabs,
 .showcase--odd .tabs,
 .showcase--experts .tabs {
   border-color: rgba(255, 255, 255, 0.2);
@@ -908,6 +919,7 @@ section {
 }
 
 /* Dark section tab text */
+.showcase + .showcase .tabs__btn,
 .showcase--odd .tabs__btn,
 .showcase--experts .tabs__btn {
   color: #ffffff;
