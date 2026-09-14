@@ -1095,6 +1095,8 @@ section {
 }
 
 .cta__copy {
+  position: relative;
+  z-index: 1;
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
@@ -1103,7 +1105,7 @@ section {
   align-items: flex-start;
   text-align: left;
   gap: 36px;
-  padding-left: 38%;   /* clear the octopus on the left */
+  padding-left: 42%;   /* clear the octopus on the left */
 }
 
 .cta__lead {
@@ -1119,9 +1121,9 @@ section {
   position: absolute;
   left: 2%;
   bottom: 0;
-  width: 380px;
-  height: 340px;
-  z-index: 3;
+  width: 500px;
+  height: 460px;
+  z-index: 20;
 }
 
 .octo--cta img,
