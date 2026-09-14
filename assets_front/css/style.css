@@ -747,12 +747,14 @@ section {
 }
 
 .showcase--recovery {
-  background: var(--lav)
+  background: #fff;
+  overflow: visible
 }
 
 .showcase--experts {
   background: var(--navy);
-  color: #eef
+  color: #eef;
+  padding-top: 160px
 }
 
 .showcase__logo {
@@ -982,10 +984,10 @@ section {
 .octo--recovery {
   position: absolute;
   left: 1%;
-  bottom: 0;
+  bottom: -100px;
   width: 250px;
   height: 290px;
-  z-index: 2
+  z-index: 10
 }
 
 .octo--recovery .ph--octo {
@@ -1238,6 +1240,7 @@ section {
     left: auto;
     right: auto;
     top: auto;
+    bottom: auto;
     transform: none
   }
 
