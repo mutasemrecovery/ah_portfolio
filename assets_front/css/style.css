@@ -747,13 +747,12 @@ section {
 }
 
 .showcase--recovery {
-  background :lightsteelblue;
+  background-color :lightsteelblue;
   overflow: visible
 }
 
 .showcase--experts {
-  background: var(--navy);
-  color: var(--navy);
+  background-color: var(--navy);
   padding-top: 160px
 }
 
