@@ -289,97 +289,34 @@ section {
   z-index: 1
 }
 
-/* ropes */
-.rope {
+/* ── Single hero board (combined octopus + sign image) ── */
+.hero-board {
   position: absolute;
-  top: 0;
-  width: 8px;
-  height: 250px;
-  z-index: 2
+  top: -30px;             /* bleeds slightly above hero → looks attached to navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  transform-origin: top center;
+  width: 82%;
+  max-width: 1000px;
+  z-index: 3;
+  animation: sway 5.5s ease-in-out infinite;
 }
 
-.rope i {
+.hero-board__img {
   display: block;
   width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(135deg, #8a6b3a 0 6px, #b98f4f 6px 12px);
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .15)
+  height: auto;
+  object-fit: contain;
 }
 
-.rope::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -21px;
-  transform: translateX(-50%);
-  width: 42px;
-  height: 42px;
-  border: 9px solid #4b2fb0;
-  border-radius: 50%;
-  background: #f5f4ff
-}
-
-.rope--l {
-  left: 32%
-}
-
-.rope--r {
-  right: 32%
-}
-
-/* sign board */
-.sign {
-  position: absolute;
-  top: 210px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 640px;
-  max-width: 78%;
-  height: 330px;
-  background: linear-gradient(180deg, #fdfdfb, #eef0ee);
-  border-radius: 34px;
-  z-index: 3;
-  box-shadow: 0 34px 60px -18px rgba(7, 0, 72, .28), inset 0 2px 0 #fff;
-  transform-origin: top center;
-  animation: sway 5.5s ease-in-out infinite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 26px;
-}
-
-.sign__hole {
-  position: absolute;
-  top: 16px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #c9ccd6;
-  box-shadow: inset 0 2px 3px rgba(0, 0, 0, .35)
-}
-
-.sign__hole--l {
-  left: 16%
-}
-
-.sign__hole--r {
-  right: 16%
-}
-
-.sign .ph--sign {
+.hero-board .ph--sign {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 24px;
   border-color: rgba(7, 0, 72, .22)
 }
 
-.sign__img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain
-}
-
-/* octopus */
+/* octopus shared — used in other sections */
 .octo {
   position: absolute;
   z-index: 4
@@ -395,17 +332,6 @@ section {
   width: 100%;
   height: 100%;
   border-radius: 26px
-}
-
-.octo--hero {
-  left: 2%;
-  top: 180px;
-  width: 330px;
-  height: 420px
-}
-
-.octo--hero .ph--octo {
-  border-radius: 30px
 }
 
 @keyframes sway {
@@ -1303,16 +1229,9 @@ section {
     height: 520px
   }
 
-  .octo--hero {
-    width: 210px;
-    height: 280px;
-    top: 150px
-  }
-
-  .sign {
-    width: 420px;
-    height: 230px;
-    top: 180px
+  .hero-board {
+    width: 90%;
+    top: -20px
   }
 
   .agencies__grid {
@@ -1390,15 +1309,9 @@ section {
     height: 440px
   }
 
-  .sign {
-    width: 300px;
-    height: 180px
-  }
-
-  .octo--hero {
-    width: 150px;
-    height: 210px;
-    left: -2%
+  .hero-board {
+    width: 96%;
+    top: -10px
   }
 
   .ph--client {

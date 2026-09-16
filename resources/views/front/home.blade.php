@@ -12,22 +12,11 @@
 <section class="hero" id="top">
   <div class="hero__pattern" aria-hidden="true"></div>
   <div class="hero__stage">
-    <div class="rope rope--l" aria-hidden="true"><i></i></div>
-    <div class="rope rope--r" aria-hidden="true"><i></i></div>
-    <div class="sign" id="sign">
-      <div class="sign__hole sign__hole--l"></div>
-      <div class="sign__hole sign__hole--r"></div>
+    <div class="hero-board" id="sign">
       @if($setting('hero_sign_image'))
-        <img src="{{ asset($setting('hero_sign_image')) }}" alt="AH.GROUP sign board" class="sign__img">
+        <img src="{{ asset($setting('hero_sign_image')) }}" alt="AH.GROUP mascot with sign board" class="hero-board__img">
       @else
-        <span class="ph ph--sign" data-label="IMAGE — Sign board with AH.GROUP logo"></span>
-      @endif
-    </div>
-    <div class="octo octo--hero float">
-      @if($setting('hero_octo_image'))
-        <img src="{{ asset($setting('hero_octo_image')) }}" alt="AH.GROUP mascot" class="octo__img">
-      @else
-        <span class="ph ph--octo" data-label="IMAGE — Octopus mascot (orange hoodie)"></span>
+        <span class="ph ph--sign" data-label="IMAGE — AH.GROUP mascot with sign board"></span>
       @endif
     </div>
   </div>
