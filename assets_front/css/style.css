@@ -286,20 +286,22 @@ section {
   max-width: 1200px;
   margin: 0 auto;
   height: 640px;
-  z-index: 1
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 /* ── Single hero board (combined octopus + sign image) ── */
 .hero-board {
-  position: absolute;
-  top: -30px;             /* bleeds slightly above hero → looks attached to navbar */
-  left: 50%;
-  transform: translateX(-50%);
-  transform-origin: top center;
+  position: relative;
+  top: -30px;
   width: 82%;
   max-width: 1000px;
+  flex-shrink: 0;
   z-index: 3;
-  animation: sway 5.5s ease-in-out infinite;
+  transform-origin: top center;
+  animation: hang 5.5s ease-in-out infinite;
 }
 
 .hero-board__img {
@@ -335,15 +337,13 @@ section {
 }
 
 @keyframes sway {
+  0%, 100% { transform: translateX(-50%) rotate(-1.6deg) }
+  50%       { transform: translateX(-50%) rotate(1.6deg) }
+}
 
-  0%,
-  100% {
-    transform: translateX(-50%) rotate(-1.6deg)
-  }
-
-  50% {
-    transform: translateX(-50%) rotate(1.6deg)
-  }
+@keyframes hang {
+  0%, 100% { transform: rotate(-1.6deg) }
+  50%       { transform: rotate(1.6deg) }
 }
 
 .float {
@@ -1176,41 +1176,84 @@ section {
    ============================================================ */
 @media (max-width:900px) {
 
-  .nav__links,
-  .nav__cta {
-    position: fixed;
-    top: 73px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    background: var(--paper);
-    padding: 20px 30px;
-    gap: 18px;
-    transform: translateY(-120%);
-    transition: transform .35s;
-    box-shadow: 0 12px 24px rgba(7, 0, 72, .1);
-    z-index: 55
+  /* ── Mobile nav: inline expanding panel ── */
+  .nav__inner {
+    flex-wrap: wrap;
+    padding: 0 20px;
+    gap: 0
   }
 
-  .nav__cta {
-    top: auto;
-    transform: translateY(-260%);
-    text-align: center
-  }
-
-  .nav.open .nav__links {
-    transform: translateY(0)
-  }
-
-  .nav.open .nav__cta {
-    transform: translateY(0);
-    position: fixed;
-    top: 245px
+  .brand {
+    flex: 1;
+    padding: 14px 0
   }
 
   .nav__burger {
     display: flex;
-    margin-left: auto
+    align-self: center;
+    margin-left: 12px
+  }
+
+  /* Links: collapsed by default */
+  .nav__links {
+    order: 3;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+    position: static;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    z-index: auto
+  }
+
+  .nav__links a {
+    display: block;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px
+  }
+
+  .nav__links a:last-child {
+    border-bottom: none
+  }
+
+  /* CTA: collapsed by default */
+  .nav__cta {
+    order: 4;
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height .35s ease, padding .35s ease, opacity .3s ease;
+    position: static;
+    transform: none;
+    z-index: auto;
+    margin: 0
+  }
+
+  /* ── Open state ── */
+  .nav.open .nav__links {
+    max-height: 600px;
+    padding: 8px 0 12px;
+    border-top: 2px solid var(--orange)
+  }
+
+  .nav.open .nav__cta {
+    max-height: 80px;
+    padding: 12px 32px;
+    margin: 12px auto 20px;
+    opacity: 1
   }
 
   .nav.open .nav__burger span:nth-child(1) {
@@ -1226,11 +1269,11 @@ section {
   }
 
   .hero__stage {
-    height: 520px
+    height: 480px
   }
 
   .hero-board {
-    width: 90%;
+    width: 92%;
     top: -20px
   }
 
@@ -1309,8 +1352,12 @@ section {
     height: 440px
   }
 
+  .hero__stage {
+    height: 380px
+  }
+
   .hero-board {
-    width: 96%;
+    width: 98%;
     top: -10px
   }
 
