@@ -7,11 +7,22 @@
 {{-- Videos panel --}}
 <div class="phones" data-panel="v">
   @for($p = 0; $p < 5; $p++)
-  @php $item = $videos->get($p); @endphp
+  @php
+    $item      = $videos->get($p);
+    $isVideo   = $item && $item->file_path &&
+                 preg_match('/\.(mp4|webm|mov|ogg|avi)$/i', $item->file_path);
+  @endphp
   <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}">
     @if($item && $item->thumbnail)
+      {{-- Proper thumbnail image uploaded → always use it --}}
       <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
+    @elseif($isVideo)
+      {{-- No thumbnail but we have a real video file → use <video> --}}
+      <video class="phone-media" autoplay muted loop playsinline preload="metadata">
+        <source src="{{ asset($item->file_path) }}">
+      </video>
     @elseif($item && $item->file_path)
+      {{-- file_path is an image (poster/cover) --}}
       <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
     @else
       <span class="ph ph--phone" data-label="{{ $p === 2 ? __('front.media_featured') : __('front.media_item') }}"></span>
