@@ -26,7 +26,7 @@
 @include('front.includes.footer')
 
 
-<script src="{{ asset('assets_front/js/app.js') }}"></script>
+<script src="{{ asset('assets_front/js/app.js') }}?v={{ filemtime(base_path('assets_front/js/app.js')) }}"></script>
 @stack('scripts')
 
 </body>

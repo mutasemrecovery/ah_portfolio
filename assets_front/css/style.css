@@ -935,8 +935,13 @@ section {
   text-align: center;
 }
 
-.phone {
+.phone[data-lightbox-src],
+.phone[data-href] {
   cursor: pointer;
+}
+
+.phone[data-lightbox-src]:hover {
+  box-shadow: 0 24px 56px -10px rgba(0, 0, 0, 0.52);
 }
 
 /* ── Phone positions (a=far-left … e=far-right, c=center) ── */

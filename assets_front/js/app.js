@@ -46,18 +46,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- Tabs (Videos / Images / Websites) ---- */
   document.querySelectorAll('[data-tabs]').forEach(group => {
-    const btns = group.querySelectorAll('.tabs__btn');
+    const btns = [...group.querySelectorAll('.tabs__btn')];
+    const panels = [...group.parentElement.querySelectorAll('[data-panel]')];
+
     btns.forEach(btn => btn.addEventListener('click', () => {
-      btns.forEach(b => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      // subtle re-animate of the phones on tab change
-      const phones = group.parentElement.querySelector('.phones');
-      if (phones) {
-        phones.animate(
-          [{ opacity: .35, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
-          { duration: 420, easing: 'ease-out' }
-        );
-      }
+      btns.forEach(b => b.classList.toggle('is-active', b === btn));
+
+      panels.forEach(panel => {
+        const isActive = panel.dataset.panel === btn.dataset.tab;
+        panel.style.display = isActive ? 'flex' : 'none';
+        panel.dispatchEvent(new CustomEvent(isActive ? 'phones:show' : 'phones:hide'));
+
+        if (isActive) {
+          panel.animate(
+            [{ opacity: .35, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
+            { duration: 420, easing: 'ease-out' }
+          );
+        }
+      });
     }));
   });
 
@@ -70,58 +76,68 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  /* ---- Phone carousel: cycles media through center phone ---- */
+  /* ---- Phone carousel: cycles media through the phone cluster ---- */
   const CAROUSEL_INTERVAL = 3200;
 
   document.querySelectorAll('[data-panel]').forEach(panel => {
-    const allPhones = [...panel.querySelectorAll('.phone')];
-    if (allPhones.length < 2) return;
+    const phones = [...panel.querySelectorAll('.phone')];
+    if (phones.length < 2) return;
 
-    // Collect all media items (img / video / .phone-site div)
-    const mediaEls = allPhones
-      .map(p => p.querySelector('.phone-media, .ph--phone'))
-      .filter(Boolean);
+    const allSlides = phones.map(phone => ({
+      html: phone.innerHTML,
+      href: phone.dataset.href || '',
+      lightboxType: phone.dataset.lightboxType || '',
+      lightboxSrc: phone.dataset.lightboxSrc || '',
+      lightboxPoster: phone.dataset.lightboxPoster || '',
+      lightboxTitle: phone.dataset.lightboxTitle || ''
+    }));
+    const realSlides = allSlides.filter(slide => slide.lightboxSrc);
+    const slides = realSlides.length > 1 ? realSlides : allSlides;
 
-    if (mediaEls.length < 2) return;
+    if (slides.length < 2) return;
 
     let idx = 0;
     let timer = null;
 
-    const swapCenter = () => {
-      idx = (idx + 1) % mediaEls.length;
-      allPhones.forEach((phone, i) => {
-        const srcIdx   = (i + idx) % mediaEls.length;
-        const existing = phone.querySelector('.phone-media, .ph--phone');
-        const source   = mediaEls[srcIdx];
-        if (!existing || !source) return;
+    const setDataset = (phone, slide) => {
+      ['href', 'lightboxType', 'lightboxSrc', 'lightboxPoster', 'lightboxTitle'].forEach(key => {
+        if (slide[key]) phone.dataset[key] = slide[key];
+        else delete phone.dataset[key];
+      });
+    };
 
-        existing.style.opacity = '0';
+    const rotatePhones = () => {
+      idx = (idx + 1) % slides.length;
+      phones.forEach((phone, i) => {
+        const slide = slides[(i + idx) % slides.length];
+        const media = phone.querySelector('.phone-media, .ph--phone');
+        if (media) media.style.opacity = '0';
+
         setTimeout(() => {
-          const clone = source.cloneNode(true);
-          clone.style.opacity = '0';
-          existing.replaceWith(clone);
-          requestAnimationFrame(() => { clone.style.opacity = '1'; });
-          if (clone.tagName === 'VIDEO') { clone.muted = true; clone.play?.(); }
+          phone.innerHTML = slide.html;
+          setDataset(phone, slide);
+          const nextMedia = phone.querySelector('.phone-media, .ph--phone');
+          if (nextMedia) {
+            nextMedia.style.opacity = '0';
+            requestAnimationFrame(() => { nextMedia.style.opacity = '1'; });
+          }
+          phone.querySelectorAll('video').forEach(video => {
+            video.muted = true;
+            video.play?.();
+          });
         }, 340);
       });
     };
 
-    const start = () => { if (!timer) timer = setInterval(swapCenter, CAROUSEL_INTERVAL); };
+    const start = () => { if (!timer) timer = setInterval(rotatePhones, CAROUSEL_INTERVAL); };
     const stop  = () => { clearInterval(timer); timer = null; };
 
-    // Start only the initially visible panel
-    if (panel.style.display !== 'none') start();
+    panel.addEventListener('mouseenter', stop);
+    panel.addEventListener('mouseleave', () => { if (panel.style.display !== 'none') start(); });
+    panel.addEventListener('phones:show', start);
+    panel.addEventListener('phones:hide', stop);
 
-    // Sync with tab switching
-    const showcase = panel.closest('.showcase__right, .showcase__left, [class*="showcase"]');
-    if (showcase) {
-      showcase.querySelectorAll('.tabs__btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          stop();
-          if (panel.dataset.panel === btn.dataset.tab) start();
-        });
-      });
-    }
+    if (panel.style.display !== 'none') start();
   });
 
   /* ---- Lightbox ---- */
@@ -155,32 +171,31 @@ document.addEventListener('DOMContentLoaded', () => {
     lbClose.addEventListener('click', close);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 
-    document.querySelectorAll('.phone').forEach(phone => {
-      phone.addEventListener('click', () => {
-        const img  = phone.querySelector('img.phone-media');
-        const vid  = phone.querySelector('video.phone-media');
-        const site = phone.querySelector('[data-href]') || phone.closest('[data-href]');
+    document.addEventListener('click', e => {
+      const phone = e.target.closest('.phone[data-lightbox-src]');
+      if (!phone) return;
 
-        let el;
-        if (img) {
-          el = document.createElement('img');
-          el.src = img.src;
-          el.alt = img.alt;
-          el.className = 'lightbox__media';
-        } else if (vid) {
-          el = document.createElement('video');
-          const s = vid.querySelector('source');
-          if (s) { const ns = document.createElement('source'); ns.src = s.src; el.appendChild(ns); }
-          else el.src = vid.src;
-          el.controls = true; el.autoplay = true; el.className = 'lightbox__media';
-        } else if (phone.dataset.href) {
-          el = document.createElement('iframe');
-          el.src = phone.dataset.href;
-          el.className = 'lightbox__media lightbox__frame';
-        }
+      let el;
+      if (phone.dataset.lightboxType === 'video') {
+        el = document.createElement('video');
+        el.src = phone.dataset.lightboxSrc;
+        if (phone.dataset.lightboxPoster) el.poster = phone.dataset.lightboxPoster;
+        el.controls = true;
+        el.autoplay = true;
+        el.playsInline = true;
+        el.className = 'lightbox__media';
+      } else if (phone.dataset.lightboxType === 'website') {
+        el = document.createElement('iframe');
+        el.src = phone.dataset.lightboxSrc;
+        el.className = 'lightbox__media lightbox__frame';
+      } else {
+        el = document.createElement('img');
+        el.src = phone.dataset.lightboxSrc;
+        el.alt = phone.dataset.lightboxTitle || '';
+        el.className = 'lightbox__media';
+      }
 
-        if (el) open(el);
-      });
+      open(el);
     });
   })();
 

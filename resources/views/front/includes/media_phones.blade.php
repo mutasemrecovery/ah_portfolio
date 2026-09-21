@@ -12,7 +12,13 @@
     $isVideo   = $item && $item->file_path &&
                  preg_match('/\.(mp4|webm|mov|ogg|avi)$/i', $item->file_path);
   @endphp
-  <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}">
+  <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"
+       @if($item && $item->file_path)
+         data-lightbox-type="{{ $isVideo ? 'video' : 'image' }}"
+         data-lightbox-src="{{ asset($item->file_path) }}"
+         @if($item->thumbnail) data-lightbox-poster="{{ asset($item->thumbnail) }}" @endif
+         data-lightbox-title="{{ $item->{'title_' . $locale} ?? '' }}"
+       @endif>
     @if($item && $item->thumbnail)
       {{-- Proper thumbnail image uploaded → always use it --}}
       <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
@@ -35,7 +41,12 @@
 <div class="phones" data-panel="i" style="display:none">
   @for($p = 0; $p < 5; $p++)
   @php $item = $images->get($p); @endphp
-  <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}">
+  <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"
+       @if($item && $item->file_path)
+         data-lightbox-type="image"
+         data-lightbox-src="{{ asset($item->file_path) }}"
+         data-lightbox-title="{{ $item->{'title_' . $locale} ?? '' }}"
+       @endif>
     @if($item && $item->file_path)
       <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
     @else
@@ -50,7 +61,12 @@
   @for($p = 0; $p < 5; $p++)
   @php $item = $websites->get($p); @endphp
   <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"
-       @if($item && $item->url) data-href="{{ $item->url }}" @endif>
+       @if($item && $item->url)
+         data-href="{{ $item->url }}"
+         data-lightbox-type="website"
+         data-lightbox-src="{{ $item->url }}"
+         data-lightbox-title="{{ $item->{'title_' . $locale} ?? '' }}"
+       @endif>
     @if($item && $item->thumbnail)
       {{-- Screenshot/thumbnail uploaded for this website --}}
       <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} ?? '' }}" class="phone-media">
