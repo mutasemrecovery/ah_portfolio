@@ -49,17 +49,19 @@
 <div class="phones" data-panel="w" style="display:none">
   @for($p = 0; $p < 5; $p++)
   @php $item = $websites->get($p); @endphp
-  <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}">
-    @if($item && $item->url)
-      <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer"
-         class="phone-media d-flex flex-column align-items-center justify-content-center gap-2 text-decoration-none">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".6">
+  <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"
+       @if($item && $item->url) data-href="{{ $item->url }}" @endif>
+    @if($item && $item->thumbnail)
+      {{-- Screenshot/thumbnail uploaded for this website --}}
+      <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} ?? '' }}" class="phone-media">
+    @elseif($item && $item->url)
+      {{-- No thumbnail: show domain + globe icon --}}
+      <div class="phone-media phone-site">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5">
           <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>
         </svg>
-        <span style="font-size:.65rem;opacity:.5;word-break:break-all;padding:0 8px;text-align:center">
-          {{ parse_url($item->url, PHP_URL_HOST) ?? $item->url }}
-        </span>
-      </a>
+        <span class="phone-site__domain">{{ parse_url($item->url, PHP_URL_HOST) ?? $item->url }}</span>
+      </div>
     @else
       <span class="ph ph--phone" data-label="{{ $p === 2 ? __('front.media_featured') : __('front.media_item') }}"></span>
     @endif

@@ -913,6 +913,30 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity .35s ease;
+}
+
+.phone-site {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f0f3ff;
+  color: var(--navy);
+}
+
+.phone-site__domain {
+  font-size: .6rem;
+  font-weight: 600;
+  opacity: .55;
+  word-break: break-all;
+  padding: 0 10px;
+  text-align: center;
+}
+
+.phone {
+  cursor: pointer;
 }
 
 /* ── Phone positions (a=far-left … e=far-right, c=center) ── */
@@ -1154,6 +1178,106 @@ section {
   border-color: var(--orange);
   color: var(--navy);
   transform: translateY(-4px)
+}
+
+/* ============================================================
+   PHONE FLOAT ANIMATIONS (staggered)
+   ============================================================ */
+.phone--a { animation: float 6.0s 0.0s ease-in-out infinite; }
+.phone--b { animation: float 5.5s 0.4s ease-in-out infinite; }
+.phone--c { animation: float 6.5s 0.8s ease-in-out infinite; }
+.phone--d { animation: float 5.5s 0.2s ease-in-out infinite; }
+.phone--e { animation: float 6.0s 0.6s ease-in-out infinite; }
+
+/* ============================================================
+   RTL SUPPORT
+   ============================================================ */
+[dir="rtl"] .tick li {
+  padding-left: 0;
+  padding-right: 26px;
+  text-align: right;
+}
+
+[dir="rtl"] .tick li::before {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .uline-sm::after {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .cta__copy {
+  align-items: flex-end;
+  text-align: right;
+  padding-left: 0;
+  padding-right: 42%;
+}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 0, 72, .88);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .18);
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+  z-index: 10001;
+}
+
+.lightbox__close:hover {
+  background: rgba(255, 255, 255, .32);
+}
+
+.lightbox__body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 92vw;
+  max-height: 90vh;
+}
+
+.lightbox__media {
+  max-width: 88vw;
+  max-height: 86vh;
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+  object-fit: contain;
+}
+
+.lightbox__frame {
+  width: 88vw;
+  height: 80vh;
+  border: none;
+  border-radius: 14px;
 }
 
 /* ============================================================
