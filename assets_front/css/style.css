@@ -21,7 +21,9 @@
 }
 
 html {
-  scroll-behavior: smooth
+  scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: hidden
 }
 
 body {
@@ -29,6 +31,8 @@ body {
   font-family: "Nunito Sans", system-ui, sans-serif;
   color: var(--ink);
   background: var(--paper);
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -58,7 +62,8 @@ img {
 }
 
 section {
-  position: relative
+  position: relative;
+  max-width: 100%
 }
 
 /* ---------- Placeholder system ---------- */
@@ -1305,6 +1310,25 @@ section {
    ============================================================ */
 @media (max-width:900px) {
 
+  body {
+    position: relative;
+    overflow-x: clip
+  }
+
+  .hero,
+  .agencies,
+  .about,
+  .clients,
+  .showcase,
+  .showcase--even,
+  .showcase--recovery,
+  .cta,
+  .footer {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip
+  }
+
   /* ── Mobile nav: inline expanding panel ── */
   .nav__inner {
     flex-wrap: wrap;
@@ -1415,7 +1439,30 @@ section {
   .about__inner,
   .showcase__inner {
     grid-template-columns: 1fr;
-    gap: 40px
+    gap: 40px;
+    width: 100%;
+    min-width: 0
+  }
+
+  .about__media,
+  .about__text,
+  .showcase__left,
+  .showcase__right,
+  .cta__copy,
+  .footer__col {
+    min-width: 0;
+    max-width: 100%
+  }
+
+  .rule-title {
+    gap: 14px;
+    max-width: 100%
+  }
+
+  .rule-title span {
+    white-space: normal;
+    max-width: calc(100vw - 96px);
+    line-height: 1.18
   }
 
   .about__frame {
@@ -1445,6 +1492,8 @@ section {
 
   .tabs {
     gap: 22px;
+    width: 100%;
+    max-width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 2px;
@@ -1470,7 +1519,8 @@ section {
     overflow-x: auto;
     overflow-y: visible;
     padding: 22px 18px 34px;
-    margin: 0 -18px;
+    margin: 0;
+    max-width: 100%;
     scroll-snap-type: x mandatory;
     touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
@@ -1528,7 +1578,8 @@ section {
 
   .footer {
     grid-template-columns: 1fr;
-    text-align: left
+    text-align: left;
+    overflow-wrap: anywhere
   }
 }
 
@@ -1561,7 +1612,7 @@ section {
     min-height: 326px;
     gap: 14px;
     padding-inline: 16px;
-    margin-inline: -16px
+    margin-inline: 0
   }
 
   .phone,
