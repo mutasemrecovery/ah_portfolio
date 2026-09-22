@@ -30,6 +30,7 @@
                 <select name="type" class="form-control @error('type') is-invalid @enderror" required>
                     <option value="video" {{ old('type') == 'video' ? 'selected' : '' }}>Video</option>
                     <option value="image" {{ old('type') == 'image' ? 'selected' : '' }}>Image</option>
+                    <option value="visual_identity" {{ old('type') == 'visual_identity' ? 'selected' : '' }}>Visual Identity</option>
                     <option value="website" {{ old('type') == 'website' ? 'selected' : '' }}>Website</option>
                 </select>
                 @error('type')<div class="invalid-feedback">{{ $message }}</div>@enderror

@@ -48,8 +48,22 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            @php $badge = ['video' => 'pill-info', 'image' => 'pill-success', 'website' => 'pill-neutral'][$item->type] @endphp
-                            <span class="pill {{ $badge }}">{{ ucfirst($item->type) }}</span>
+                            @php
+                                $labels = [
+                                    'video' => 'Video',
+                                    'image' => 'Image',
+                                    'visual_identity' => 'Visual Identity',
+                                    'website' => 'Website',
+                                ];
+                                $badges = [
+                                    'video' => 'pill-info',
+                                    'image' => 'pill-success',
+                                    'visual_identity' => 'pill-warning',
+                                    'website' => 'pill-neutral',
+                                ];
+                                $badge = $badges[$item->type] ?? 'pill-neutral';
+                            @endphp
+                            <span class="pill {{ $badge }}">{{ $labels[$item->type] ?? ucfirst($item->type) }}</span>
                         </td>
                         <td>{{ $item->title_en ?: '—' }}</td>
                         <td>

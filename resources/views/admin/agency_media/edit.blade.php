@@ -31,6 +31,7 @@
                 <select name="type" class="form-control" required>
                     <option value="video"   {{ old('type', $medium->type) == 'video'   ? 'selected' : '' }}>Video</option>
                     <option value="image"   {{ old('type', $medium->type) == 'image'   ? 'selected' : '' }}>Image</option>
+                    <option value="visual_identity" {{ old('type', $medium->type) == 'visual_identity' ? 'selected' : '' }}>Visual Identity</option>
                     <option value="website" {{ old('type', $medium->type) == 'website' ? 'selected' : '' }}>Website</option>
                 </select>
             </div>

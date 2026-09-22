@@ -168,7 +168,7 @@
   $images   = ($agency->media ?? collect())->where('type', 'image')->values();
   $websites = ($agency->media ?? collect())->where('type', 'website')->values();
   $visualIdentities = $agencies
-      ->flatMap(fn($itemAgency) => ($itemAgency->media ?? collect())->where('type', 'image'))
+      ->flatMap(fn($itemAgency) => ($itemAgency->media ?? collect())->where('type', 'visual_identity'))
       ->sortBy('sort_order')
       ->values();
 @endphp
@@ -207,13 +207,13 @@
     </div>
 
     <div class="showcase__right reveal">
-      @include('front.includes.media_phones', compact('videos','images','websites','locale'))
+      @include('front.includes.media_phones', compact('videos','images','websites','visualIdentities','locale'))
     </div>
 
     @else
     {{-- Odd: media left, content right --}}
     <div class="showcase__right reveal">
-      @include('front.includes.media_phones', compact('videos','images','websites','locale'))
+      @include('front.includes.media_phones', compact('videos','images','websites','visualIdentities','locale'))
     </div>
 
     <div class="showcase__left showcase__left--right reveal">

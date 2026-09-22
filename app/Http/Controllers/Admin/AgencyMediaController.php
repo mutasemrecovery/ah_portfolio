@@ -23,7 +23,7 @@ class AgencyMediaController extends Controller
     public function store(Request $request, Agency $agency)
     {
         $request->validate([
-            'type'       => 'required|in:video,image,website',
+            'type'       => 'required|in:video,image,visual_identity,website',
             'title_en'   => 'nullable|string|max:300',
             'title_ar'   => 'nullable|string|max:300',
             'url'        => 'nullable|string|max:500',
@@ -62,7 +62,7 @@ class AgencyMediaController extends Controller
     public function update(Request $request, Agency $agency, AgencyMedia $medium)
     {
         $request->validate([
-            'type'       => 'required|in:video,image,website',
+            'type'       => 'required|in:video,image,visual_identity,website',
             'title_en'   => 'nullable|string|max:300',
             'title_ar'   => 'nullable|string|max:300',
             'url'        => 'nullable|string|max:500',

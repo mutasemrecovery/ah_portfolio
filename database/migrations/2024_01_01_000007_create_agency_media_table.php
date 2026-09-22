@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('agency_media', function (Blueprint $table) {
             $table->id();
             $table->foreignId('agency_id')->constrained('agencies')->cascadeOnDelete();
-            $table->enum('type', ['video', 'image', 'website']);
+            $table->enum('type', ['video', 'image', 'visual_identity', 'website']);
             $table->string('file_path', 500)->nullable();
             $table->string('thumbnail', 500)->nullable();
             $table->string('title_en', 300)->nullable();
