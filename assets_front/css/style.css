@@ -1443,6 +1443,68 @@ section {
     order: 0
   }
 
+  .tabs {
+    gap: 22px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none
+  }
+
+  .tabs__btn {
+    flex: 0 0 auto;
+    white-space: nowrap
+  }
+
+  .phones {
+    height: auto;
+    min-height: 360px;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 18px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 22px 18px 34px;
+    margin: 0 -18px;
+    scroll-snap-type: x mandatory;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none
+  }
+
+  .phones::-webkit-scrollbar {
+    display: none
+  }
+
+  .phone,
+  .phone--a,
+  .phone--b,
+  .phone--c,
+  .phone--d,
+  .phone--e {
+    position: relative;
+    inset: auto;
+    flex: 0 0 180px;
+    width: 180px;
+    height: 322px;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+    animation: none;
+    scroll-snap-align: center
+  }
+
+  .phones:hover .phone--b,
+  .phones:hover .phone--d {
+    transform: none
+  }
+
   .cta {
     flex-direction: column;
     min-height: auto;
@@ -1493,6 +1555,24 @@ section {
   .ph--client {
     width: 150px;
     height: 96px
+  }
+
+  .phones {
+    min-height: 326px;
+    gap: 14px;
+    padding-inline: 16px;
+    margin-inline: -16px
+  }
+
+  .phone,
+  .phone--a,
+  .phone--b,
+  .phone--c,
+  .phone--d,
+  .phone--e {
+    flex-basis: 162px;
+    width: 162px;
+    height: 290px
   }
 }
 

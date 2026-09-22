@@ -167,6 +167,10 @@
   $videos   = ($agency->media ?? collect())->where('type', 'video')->values();
   $images   = ($agency->media ?? collect())->where('type', 'image')->values();
   $websites = ($agency->media ?? collect())->where('type', 'website')->values();
+  $visualIdentities = $agencies
+      ->flatMap(fn($itemAgency) => ($itemAgency->media ?? collect())->where('type', 'image'))
+      ->sortBy('sort_order')
+      ->values();
 @endphp
 
 <section class="showcase showcase--{{ $isEven ? 'even' : 'odd' }} showcase--{{ $agency->slug }}" id="{{ $agency->slug }}">

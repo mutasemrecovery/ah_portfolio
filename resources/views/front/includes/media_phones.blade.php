@@ -1,6 +1,7 @@
 <div class="tabs" data-tabs>
   <button class="tabs__btn is-active" data-tab="v">{{ __('front.tab_videos') }}</button>
   <button class="tabs__btn" data-tab="i">{{ __('front.tab_images') }}</button>
+  <button class="tabs__btn" data-tab="vi">{{ __('front.tab_visual_identity') }}</button>
   <button class="tabs__btn" data-tab="w">{{ __('front.tab_websites') }}</button>
 </div>
 
@@ -51,6 +52,25 @@
       <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
     @else
       <span class="ph ph--phone" data-label="{{ $p === 2 ? __('front.media_featured') : __('front.media_item') }}"></span>
+    @endif
+  </div>
+  @endfor
+</div>
+
+{{-- Visual Identity panel shared by Recovery and Experts --}}
+<div class="phones" data-panel="vi" style="display:none">
+  @for($p = 0; $p < 5; $p++)
+  @php $item = ($visualIdentities ?? collect())->get($p); @endphp
+  <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"
+       @if($item && $item->file_path)
+         data-lightbox-type="image"
+         data-lightbox-src="{{ asset($item->file_path) }}"
+         data-lightbox-title="{{ $item->{'title_' . $locale} ?? 'Visual Identity' }}"
+       @endif>
+    @if($item && $item->file_path)
+      <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} ?? 'Visual Identity' }}" class="phone-media">
+    @else
+      <span class="ph ph--phone" data-label="Visual Identity"></span>
     @endif
   </div>
   @endfor

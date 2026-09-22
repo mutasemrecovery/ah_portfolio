@@ -38,6 +38,7 @@ return [
     // ── Showcase tabs ─────────────────────────────────────────────
     'tab_videos'        => 'Videos',
     'tab_images'        => 'Images',
+    'tab_visual_identity' => 'Visual Identity',
     'tab_websites'      => 'Websites',
 
     // ── CTA ───────────────────────────────────────────────────────
