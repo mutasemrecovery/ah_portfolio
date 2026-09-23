@@ -450,8 +450,18 @@ section {
 .agcard__logo {
   background: var(--lav);
   border-radius: 16px;
-  padding: 44px 20px;
-  margin-bottom: 22px
+  padding: 20px;
+  margin-bottom: 22px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agcard__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .ph--wide {
@@ -462,7 +472,7 @@ section {
 .agcard__desc {
   font-family: "Montserrat";
   font-weight: 700;
-  font-size: 15px;
+  font-size: 17px;
   letter-spacing: .02em;
   color: var(--navy);
   line-height: 1.6
