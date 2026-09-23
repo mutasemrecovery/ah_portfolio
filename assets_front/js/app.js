@@ -39,9 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revealer.observe(el));
 
-  /* ---- Seamless marquee: duplicate each row's contents once ---- */
+  /* ---- Seamless marquee: even copies so translateX(-50%) loops cleanly ---- */
   document.querySelectorAll('.marquee__track').forEach(track => {
-    track.innerHTML += track.innerHTML;
+    const original = track.innerHTML;
+    track.innerHTML += original;                    // 2× (minimum even)
+    while (track.scrollWidth < window.innerWidth * 2) {
+      track.innerHTML += original + original;       // +2 at a time → always even
+    }
   });
 
   /* ---- Tabs (Videos / Images / Websites) ---- */

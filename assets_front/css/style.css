@@ -624,7 +624,8 @@ section {
   display: flex;
   gap: 34px;
   width: max-content;
-  padding: 0 17px
+  padding: 0 17px;
+  direction: ltr
 }
 
 .marquee__track--l {
@@ -633,10 +634,6 @@ section {
 
 .marquee__track--r {
   animation: scrollR 34s linear infinite
-}
-
-.marquee:hover .marquee__track {
-  animation-play-state: paused
 }
 
 .ph--client {
