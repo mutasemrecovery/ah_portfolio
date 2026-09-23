@@ -485,7 +485,9 @@ section {
   background: var(--navy);
   color: #eef;
   padding: 120px 20px 0;
-  overflow: hidden
+  overflow: visible;
+  position: relative;
+  z-index: 5
 }
 
 .about__inner {
@@ -542,7 +544,7 @@ section {
 
 .octo--about {
   right: 2%;
-  bottom: -60px;
+  top: -200px;
   width: 420px;
   height: 440px;
   position: absolute;
