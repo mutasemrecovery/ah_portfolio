@@ -468,9 +468,9 @@ section {
 .octo--peek {
   position: relative;
   left: 0;
-  margin: -10px auto -80px;
-  width: 300px;
-  height: 300px;
+  margin: -10px auto -120px;
+  width: 460px;
+  height: 460px;
   z-index: 5
 }
 
@@ -542,9 +542,9 @@ section {
 
 .octo--about {
   right: 2%;
-  bottom: -30px;
-  width: 280px;
-  height: 300px;
+  bottom: -60px;
+  width: 420px;
+  height: 440px;
   position: absolute;
   z-index: 6
 }
