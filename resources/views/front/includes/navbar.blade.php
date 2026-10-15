@@ -21,6 +21,13 @@
         <a href="#{{ $agency->slug }}">{{ strtoupper($agency->{'name_' . $locale} ?? $agency->name_en) }}</a>
       @endforeach
     </nav>
+    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+      @if($localeCode !== $locale)
+        <a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="nav__lang" rel="alternate" hreflang="{{ $localeCode }}">
+          {{ $localeCode === 'ar' ? 'عربي' : 'EN' }}
+        </a>
+      @endif
+    @endforeach
     <a href="#contact" class="btn btn--orange nav__cta">{{ __('front.nav_contact') }}</a>
     <button class="nav__burger" id="burger" aria-label="{{ __('front.nav_menu_aria') }}"><span></span><span></span><span></span></button>
   </div>

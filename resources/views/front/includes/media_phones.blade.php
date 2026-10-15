@@ -2,7 +2,9 @@
   <button class="tabs__btn is-active" data-tab="v">{{ __('front.tab_videos') }}</button>
   <button class="tabs__btn" data-tab="i">{{ __('front.tab_images') }}</button>
   <button class="tabs__btn" data-tab="vi">{{ __('front.tab_visual_identity') }}</button>
+  @if($websites->isNotEmpty())
   <button class="tabs__btn" data-tab="w">{{ __('front.tab_websites') }}</button>
+  @endif
 </div>
 
 {{-- Videos panel --}}

@@ -144,49 +144,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (panel.style.display !== 'none') start();
   });
 
-  /* ---- Lightbox ---- */
+  /* ---- Lightbox with prev/next navigation ---- */
   (() => {
     const overlay = document.createElement('div');
     overlay.className = 'lightbox';
     overlay.innerHTML =
-      '<button class="lightbox__close" aria-label="Close">&#x2715;</button>' +
-      '<div class="lightbox__body"></div>';
+      '<button class="lightbox__close"  aria-label="Close">&#x2715;</button>' +
+      '<button class="lightbox__prev"   aria-label="Previous">&#x2039;</button>' +
+      '<div class="lightbox__body"></div>' +
+      '<button class="lightbox__next"   aria-label="Next">&#x203A;</button>' +
+      '<span  class="lightbox__counter"></span>';
 
-    const lbBody  = overlay.querySelector('.lightbox__body');
-    const lbClose = overlay.querySelector('.lightbox__close');
+    const lbBody    = overlay.querySelector('.lightbox__body');
+    const lbClose   = overlay.querySelector('.lightbox__close');
+    const lbPrev    = overlay.querySelector('.lightbox__prev');
+    const lbNext    = overlay.querySelector('.lightbox__next');
+    const lbCounter = overlay.querySelector('.lightbox__counter');
 
-    const open = el => {
-      lbBody.innerHTML = '';
-      lbBody.appendChild(el);
-      document.body.appendChild(overlay);
-      document.body.style.overflow = 'hidden';
-      requestAnimationFrame(() => overlay.classList.add('is-open'));
-    };
+    let items = [];
+    let idx   = 0;
 
-    const close = () => {
-      overlay.classList.remove('is-open');
-      setTimeout(() => {
-        overlay.remove();
-        document.body.style.overflow = '';
-      }, 260);
-    };
-
-    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-    lbClose.addEventListener('click', close);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-
-    document.addEventListener('click', e => {
-      const phone = e.target.closest('.phone[data-lightbox-src]');
-      if (!phone) return;
-
+    const buildEl = phone => {
       let el;
       if (phone.dataset.lightboxType === 'video') {
         el = document.createElement('video');
         el.src = phone.dataset.lightboxSrc;
         if (phone.dataset.lightboxPoster) el.poster = phone.dataset.lightboxPoster;
-        el.controls = true;
-        el.autoplay = true;
-        el.playsInline = true;
+        el.controls = true; el.autoplay = true; el.playsInline = true;
         el.className = 'lightbox__media';
       } else if (phone.dataset.lightboxType === 'website') {
         el = document.createElement('iframe');
@@ -198,8 +182,55 @@ document.addEventListener('DOMContentLoaded', () => {
         el.alt = phone.dataset.lightboxTitle || '';
         el.className = 'lightbox__media';
       }
+      return el;
+    };
 
-      open(el);
+    const show = i => {
+      idx = (i + items.length) % items.length;
+      lbBody.innerHTML = '';
+      lbBody.appendChild(buildEl(items[idx]));
+      const multi = items.length > 1;
+      lbPrev.style.display    = multi ? '' : 'none';
+      lbNext.style.display    = multi ? '' : 'none';
+      lbCounter.textContent   = multi ? (idx + 1) + ' / ' + items.length : '';
+    };
+
+    const open = (allItems, startIdx) => {
+      items = allItems;
+      document.body.appendChild(overlay);
+      document.body.style.overflow = 'hidden';
+      show(startIdx);
+      requestAnimationFrame(() => overlay.classList.add('is-open'));
+    };
+
+    const close = () => {
+      overlay.classList.remove('is-open');
+      setTimeout(() => { overlay.remove(); document.body.style.overflow = ''; }, 260);
+    };
+
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    lbClose.addEventListener('click', close);
+    lbPrev.addEventListener('click', e => { e.stopPropagation(); show(idx - 1); });
+    lbNext.addEventListener('click', e => { e.stopPropagation(); show(idx + 1); });
+
+    document.addEventListener('keydown', e => {
+      if (!document.body.contains(overlay)) return;
+      if (e.key === 'Escape')     close();
+      if (e.key === 'ArrowLeft')  show(idx - 1);
+      if (e.key === 'ArrowRight') show(idx + 1);
+    });
+
+    document.addEventListener('click', e => {
+      const phone = e.target.closest('.phone[data-lightbox-src]');
+      if (!phone) return;
+
+      const panel    = phone.closest('[data-panel]');
+      const allItems = panel
+        ? [...panel.querySelectorAll('.phone[data-lightbox-src]')]
+        : [phone];
+      const start = allItems.indexOf(phone);
+
+      open(allItems, start >= 0 ? start : 0);
     });
   })();
 
