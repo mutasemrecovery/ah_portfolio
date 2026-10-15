@@ -59,23 +59,50 @@
   @endfor
 </div>
 
-{{-- Visual Identity panel shared by Recovery and Experts --}}
-<div class="phones" data-panel="vi" style="display:none">
-  @for($p = 0; $p < 5; $p++)
-  @php $item = ($visualIdentities ?? collect())->get($p); @endphp
-  <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"
-       @if($item && $item->file_path)
-         data-lightbox-type="image"
-         data-lightbox-src="{{ asset($item->file_path) }}"
-         data-lightbox-title="{{ $item->{'title_' . $locale} ?? 'Visual Identity' }}"
-       @endif>
-    @if($item && $item->file_path)
-      <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} ?? 'Visual Identity' }}" class="phone-media">
-    @else
-      <span class="ph ph--phone" data-label="Visual Identity"></span>
-    @endif
-  </div>
-  @endfor
+{{-- Visual Identity panel — PDF viewer --}}
+@php
+  $viItems = $visualIdentities ?? collect();
+  $viSlides = $viItems->map(fn($item) => [
+      'src'    => asset($item->file_path),
+      'title'  => $item->{'title_' . $locale} ?? '',
+      'is_pdf' => strtolower(pathinfo($item->file_path ?? '', PATHINFO_EXTENSION)) === 'pdf',
+  ])->values()->all();
+@endphp
+<div class="pdf-shelf" data-panel="vi" style="display:none">
+  @if($viItems->isNotEmpty())
+    @php $first = $viSlides[0]; @endphp
+    <div class="pdf-carousel" data-slides='@json($viSlides)'>
+
+      <div class="pdf-carousel__stage">
+        @if($first['is_pdf'])
+          <iframe class="pdf-carousel__frame" src="{{ $first['src'] }}#toolbar=0&navpanes=0&scrollbar=1" title="{{ $first['title'] }}"></iframe>
+        @else
+          <img src="{{ $first['src'] }}" alt="{{ $first['title'] }}" class="pdf-carousel__img">
+        @endif
+        <a href="{{ $first['src'] }}" target="_blank" rel="noopener" class="pdf-carousel__open" title="فتح في تبويب جديد">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
+      @if($viItems->count() > 1)
+      <div class="pdf-carousel__bar">
+        <button class="pdf-carousel__btn pdf-carousel__btn--prev" aria-label="السابق">&#x2039;</button>
+        <span class="pdf-carousel__counter">1 / {{ $viItems->count() }}</span>
+        <button class="pdf-carousel__btn pdf-carousel__btn--next" aria-label="التالي">&#x203A;</button>
+      </div>
+      @endif
+
+      @if($first['title'])
+        <p class="pdf-carousel__title">{{ $first['title'] }}</p>
+      @endif
+
+    </div>
+  @else
+    <div class="pdf-empty">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".35"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <p>لا توجد ملفات Visual Identity</p>
+    </div>
+  @endif
 </div>
 
 {{-- Websites panel --}}

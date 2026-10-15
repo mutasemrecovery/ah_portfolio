@@ -27,11 +27,11 @@
         <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">النوع <span class="text-danger">*</span></label>
-                <select name="type" class="form-control @error('type') is-invalid @enderror" required>
-                    <option value="video" {{ old('type') == 'video' ? 'selected' : '' }}>Video</option>
-                    <option value="image" {{ old('type') == 'image' ? 'selected' : '' }}>Image</option>
-                    <option value="visual_identity" {{ old('type') == 'visual_identity' ? 'selected' : '' }}>Visual Identity</option>
-                    <option value="website" {{ old('type') == 'website' ? 'selected' : '' }}>Website</option>
+                <select name="type" id="media-type" class="form-control @error('type') is-invalid @enderror" required>
+                    <option value="video"            {{ old('type') == 'video'            ? 'selected' : '' }}>Video</option>
+                    <option value="image"            {{ old('type') == 'image'            ? 'selected' : '' }}>Image</option>
+                    <option value="visual_identity"  {{ old('type') == 'visual_identity'  ? 'selected' : '' }}>Visual Identity</option>
+                    <option value="website"          {{ old('type') == 'website'          ? 'selected' : '' }}>Website</option>
                 </select>
                 @error('type')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
@@ -53,12 +53,13 @@
                 <label class="form-label">العنوان (AR)</label>
                 <input type="text" name="title_ar" value="{{ old('title_ar') }}" class="form-control" dir="rtl">
             </div>
-            <div class="col-12">
-                <label class="form-label">ملف (صورة / فيديو)</label>
-                <input type="file" name="file" class="form-control @error('file') is-invalid @enderror"
-                       accept="image/*,video/*">
-                <small class="text-muted">JPG, PNG, GIF, MP4, WEBM — Max 20MB</small>
-                @error('file')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            <div class="col-12" id="files-wrap">
+                <label class="form-label" id="files-label">ملفات</label>
+                <input type="file" name="files[]" id="media-files"
+                       class="form-control @error('files.*') is-invalid @enderror"
+                       accept="image/*,video/*" multiple>
+                <small class="text-muted" id="files-hint">يمكنك اختيار أكثر من ملف دفعة واحدة — JPG, PNG, GIF, MP4, WEBM — Max 20MB لكل ملف</small>
+                @error('files.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <div class="col-12">
                 <label class="form-label">Thumbnail (للفيديوهات والمواقع)</label>
@@ -80,4 +81,33 @@
 </div>
 
 </form>
+
+@push('scripts')
+<script>
+(function () {
+    const typeEl  = document.getElementById('media-type');
+    const fileEl  = document.getElementById('media-files');
+    const labelEl = document.getElementById('files-label');
+    const hintEl  = document.getElementById('files-hint');
+    const wrapEl  = document.getElementById('files-wrap');
+
+    const cfg = {
+        video:           { accept: 'video/*,.mp4,.webm',          label: 'فيديوهات',           hint: 'MP4, WEBM — Max 20MB لكل ملف', show: true  },
+        image:           { accept: 'image/*,.jpg,.jpeg,.png,.gif', label: 'صور',                hint: 'JPG, PNG, GIF — Max 20MB لكل ملف', show: true  },
+        visual_identity: { accept: '.pdf,application/pdf',         label: 'ملفات PDF',          hint: 'PDF فقط — Max 20MB لكل ملف', show: true  },
+        website:         { accept: '',                             label: 'ملفات',              hint: '',                            show: false },
+    };
+
+    typeEl.addEventListener('change', function () {
+        const c = cfg[this.value] || cfg.image;
+        fileEl.accept    = c.accept;
+        labelEl.textContent = c.label;
+        hintEl.textContent  = c.hint;
+        wrapEl.style.display = c.show ? '' : 'none';
+    });
+
+    typeEl.dispatchEvent(new Event('change'));
+})();
+</script>
+@endpush
 @endsection
