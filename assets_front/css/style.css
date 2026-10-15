@@ -634,6 +634,7 @@ section {
 .marquee {
   overflow: hidden;
   padding: 14px 0;
+  direction: ltr;
   -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)
 }
