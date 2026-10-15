@@ -912,76 +912,168 @@ section {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   9. PDF CAROUSEL (Visual Identity)
+   9. PDF CARDS (Visual Identity)
    ───────────────────────────────────────────────────────────── */
 .pdf-shelf {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 0;
+  gap: 20px;
+  min-height: 420px;
+  justify-content: center;
 }
 
-.pdf-carousel {
+/* Single document card */
+.pdf-card {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  width: 100%;
-  max-width: 520px;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
 }
 
-.pdf-carousel__stage {
+.pdf-card--hidden {
+  display: none !important;
+}
+
+.pdf-card__page {
   position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 28px 70px rgba(7, 0, 72, .22);
+  width: 230px;
+  height: 306px;
   background: #fff;
-  aspect-ratio: 3 / 4;
+  border-radius: 3px 22px 3px 3px;
+  box-shadow:
+    0 2px 6px rgba(7, 0, 72, .08),
+    0 12px 36px rgba(7, 0, 72, .16);
+  overflow: hidden;
+  padding: 28px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  transition: transform .28s ease, box-shadow .28s ease;
 }
 
-.pdf-carousel__frame,
-.pdf-carousel__img {
-  width: 100%;
-  height: 100%;
-  border: none;
-  object-fit: contain;
-  display: block;
+.pdf-card:hover .pdf-card__page {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow:
+    0 4px 12px rgba(7, 0, 72, .1),
+    0 24px 60px rgba(7, 0, 72, .26);
 }
 
-.pdf-carousel__open {
+/* Folded corner */
+.pdf-card__fold {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(7, 0, 72, .65);
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 38px 38px 0;
+  border-color: transparent var(--lav-2) transparent transparent;
+  z-index: 1;
+}
+
+.pdf-card__fold::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -38px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 38px 38px 0 0;
+  border-color: rgba(7, 0, 72, .07) transparent transparent transparent;
+}
+
+/* Fake text lines */
+.pdf-card__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+  flex: 1;
+}
+
+.pdf-card__lines span {
+  height: 7px;
+  background: var(--lav);
+  border-radius: 4px;
+}
+
+.pdf-card__lines span:nth-child(2)  { width: 88%; }
+.pdf-card__lines span:nth-child(3)  { width: 75%; }
+.pdf-card__lines span:nth-child(5)  { width: 92%; }
+.pdf-card__lines span:nth-child(6)  { width: 80%; }
+.pdf-card__lines span:nth-child(8)  { width: 65%; }
+.pdf-card__line--s                  { width: 45% !important; }
+
+/* PDF badge */
+.pdf-card__badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: #dc2626;
   color: #fff;
+  font-family: "Montserrat";
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: .12em;
+  padding: 3px 9px;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+/* Hover overlay */
+.pdf-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 0, 72, .68);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  font-family: "Montserrat";
+  font-weight: 700;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity .25s ease;
+  border-radius: inherit;
+}
+
+.pdf-card:hover .pdf-card__overlay {
+  opacity: 1;
+}
+
+.pdf-card__title {
+  font-family: "Montserrat";
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--navy);
+  text-align: center;
+  max-width: 230px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Navigation */
+.pdf-shelf__nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .2s;
-  z-index: 2;
+  gap: 18px;
 }
 
-.pdf-carousel__open:hover {
-  background: var(--navy);
-}
-
-.pdf-carousel__bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.pdf-carousel__btn {
-  width: 46px;
-  height: 46px;
+.pdf-shelf__btn {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 2px solid var(--navy);
   background: transparent;
   color: var(--navy);
-  font-size: 32px;
+  font-size: 30px;
   line-height: 1;
   cursor: pointer;
   display: flex;
@@ -990,36 +1082,28 @@ section {
   transition: background .2s, color .2s;
 }
 
-.pdf-carousel__btn:hover {
+.pdf-shelf__btn:hover {
   background: var(--navy);
   color: #fff;
 }
 
-.pdf-carousel__counter {
+.pdf-shelf__counter {
   font-family: "Montserrat";
   font-weight: 700;
-  font-size: 15px;
-  color: var(--navy);
-  min-width: 60px;
-  text-align: center;
-}
-
-.pdf-carousel__title {
-  text-align: center;
-  font-family: "Montserrat";
-  font-weight: 600;
   font-size: 14px;
-  color: var(--muted);
-  margin: 0;
+  color: var(--navy);
+  min-width: 50px;
+  text-align: center;
 }
 
+/* Empty state */
 .pdf-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 14px;
-  padding: 70px 20px;
+  padding: 60px 20px;
   color: var(--muted);
   font-family: "Montserrat";
   font-size: 14px;
@@ -1027,27 +1111,32 @@ section {
 }
 
 /* Dark showcase (Experts) overrides */
-.showcase--odd .pdf-carousel__btn,
-.showcase + .showcase .pdf-carousel__btn {
-  border-color: #e8eaff;
-  color: #e8eaff;
+.showcase--odd .pdf-card__page,
+.showcase + .showcase .pdf-card__page {
+  background: #1a1660;
 }
 
-.showcase--odd .pdf-carousel__btn:hover,
-.showcase + .showcase .pdf-carousel__btn:hover {
-  background: #e8eaff;
-  color: var(--navy);
+.showcase--odd .pdf-card__lines span,
+.showcase + .showcase .pdf-card__lines span {
+  background: rgba(232, 234, 255, .2);
 }
 
-.showcase--odd .pdf-carousel__counter,
-.showcase + .showcase .pdf-carousel__counter {
-  color: #e8eaff;
+.showcase--odd .pdf-card__fold,
+.showcase + .showcase .pdf-card__fold {
+  border-right-color: #2d29a0;
 }
 
-.showcase--odd .pdf-carousel__title,
-.showcase + .showcase .pdf-carousel__title {
-  color: rgba(232, 234, 255, .65);
-}
+.showcase--odd .pdf-card__title,
+.showcase + .showcase .pdf-card__title { color: #e8eaff; }
+
+.showcase--odd .pdf-shelf__btn,
+.showcase + .showcase .pdf-shelf__btn { border-color: #e8eaff; color: #e8eaff; }
+
+.showcase--odd .pdf-shelf__btn:hover,
+.showcase + .showcase .pdf-shelf__btn:hover { background: #e8eaff; color: var(--navy); }
+
+.showcase--odd .pdf-shelf__counter,
+.showcase + .showcase .pdf-shelf__counter { color: #e8eaff; }
 
 /* ── 9. PHONE MOCKUP CLUSTER
    ───────────────────────────────────────────────────────────── */

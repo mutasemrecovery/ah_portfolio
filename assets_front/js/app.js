@@ -144,36 +144,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (panel.style.display !== 'none') start();
   });
 
-  /* ---- PDF Carousel (Visual Identity) ---- */
-  document.querySelectorAll('.pdf-carousel').forEach(carousel => {
-    const slides  = JSON.parse(carousel.dataset.slides || '[]');
-    if (slides.length < 2) return;
+  /* ---- PDF Cards navigation (Visual Identity) ---- */
+  document.querySelectorAll('.pdf-shelf').forEach(shelf => {
+    const cards   = [...shelf.querySelectorAll('.pdf-card')];
+    const counter = shelf.querySelector('.pdf-shelf__counter');
+    if (cards.length < 2) return;
 
-    const stage   = carousel.querySelector('.pdf-carousel__stage');
-    const openBtn = carousel.querySelector('.pdf-carousel__open');
-    const counter = carousel.querySelector('.pdf-carousel__counter');
-    const titleEl = carousel.querySelector('.pdf-carousel__title');
     let idx = 0;
 
     const show = i => {
-      idx = (i + slides.length) % slides.length;
-      const s = slides[idx];
-      const content = s.is_pdf
-        ? `<iframe class="pdf-carousel__frame" src="${s.src}#toolbar=0&navpanes=0&scrollbar=1" title="${s.title}"></iframe>`
-        : `<img src="${s.src}" alt="${s.title}" class="pdf-carousel__img">`;
-      // rebuild inner content but keep the open button
-      stage.innerHTML = content;
-      const btn = document.createElement('a');
-      btn.href = s.src; btn.target = '_blank'; btn.rel = 'noopener';
-      btn.className = 'pdf-carousel__open'; btn.title = 'فتح في تبويب جديد';
-      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
-      stage.appendChild(btn);
-      if (counter) counter.textContent = (idx + 1) + ' / ' + slides.length;
-      if (titleEl) titleEl.textContent = s.title;
+      idx = (i + cards.length) % cards.length;
+      cards.forEach((c, j) => c.classList.toggle('pdf-card--hidden', j !== idx));
+      if (counter) counter.textContent = (idx + 1) + ' / ' + cards.length;
     };
 
-    carousel.querySelector('.pdf-carousel__btn--prev')?.addEventListener('click', () => show(idx - 1));
-    carousel.querySelector('.pdf-carousel__btn--next')?.addEventListener('click', () => show(idx + 1));
+    shelf.querySelector('.pdf-shelf__btn--prev')?.addEventListener('click', () => show(idx - 1));
+    shelf.querySelector('.pdf-shelf__btn--next')?.addEventListener('click', () => show(idx + 1));
   });
 
   /* ---- Lightbox with prev/next navigation ---- */
@@ -253,14 +239,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('click', e => {
-      const phone = e.target.closest('.phone[data-lightbox-src]');
-      if (!phone) return;
+      const target = e.target.closest('.phone[data-lightbox-src], .pdf-card[data-lightbox-src]');
+      if (!target) return;
 
-      const panel    = phone.closest('[data-panel]');
+      const panel    = target.closest('[data-panel]');
       const allItems = panel
-        ? [...panel.querySelectorAll('.phone[data-lightbox-src]')]
-        : [phone];
-      const start = allItems.indexOf(phone);
+        ? [...panel.querySelectorAll('.phone[data-lightbox-src], .pdf-card[data-lightbox-src]')]
+        : [target];
+      const start = allItems.indexOf(target);
 
       open(allItems, start >= 0 ? start : 0);
     });
