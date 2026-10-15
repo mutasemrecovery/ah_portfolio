@@ -1249,11 +1249,15 @@ section {
   right: 0;
 }
 
+/* CTA: keep same layout in Arabic — octopus stays left, text stays right */
 [dir="rtl"] .cta__copy {
-  align-items: flex-end;
   text-align: right;
-  padding-left: 0;
-  padding-right: 42%;
+}
+
+/* Marquee: physical mask so fade direction never changes with RTL */
+[dir="rtl"] .marquee {
+  -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 
 /* ============================================================
