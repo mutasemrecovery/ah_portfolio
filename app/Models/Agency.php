@@ -25,7 +25,7 @@ class Agency extends Model
 
     public function media()
     {
-        return $this->hasMany(AgencyMedia::class)->orderBy('sort_order');
+        return $this->hasMany(AgencyMedia::class)->orderByDesc('id');
     }
 
     public function getNameAttribute(): string

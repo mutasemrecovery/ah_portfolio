@@ -11,7 +11,7 @@ class AgencyMediaController extends Controller
 {
     public function index(Agency $agency)
     {
-        $media = $agency->media()->orderBy('type')->orderBy('sort_order')->get();
+        $media = $agency->media()->orderByDesc('id')->get();
         return view('admin.agency_media.index', compact('agency', 'media'));
     }
 
