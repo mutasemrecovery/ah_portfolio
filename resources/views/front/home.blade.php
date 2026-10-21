@@ -30,7 +30,7 @@
   </div>
 </section>
 
-<!-- ================= INTEGRATED AGENCIES ================= -->
+{{-- <!-- ================= INTEGRATED AGENCIES ================= -->
 <section class="agencies" id="agencies">
   <h2 class="rule-title reveal">
     <span>{{ $setting('agencies_title') ?: __('front.agencies_title') }}</span>
@@ -158,7 +158,7 @@
     </div>
   </div>
   @endif
-</section>
+</section> --}}
 
 <!-- ================= AGENCY SHOWCASES ================= -->
 @foreach($agencies as $index => $agency)

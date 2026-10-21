@@ -44,6 +44,12 @@ class AgencyMediaController extends Controller
         $thumbPath = null;
         if ($request->hasFile('thumbnail')) {
             $thumbPath = 'uploads/agency_media/thumbs/' . uploadImage('uploads/agency_media/thumbs', $request->file('thumbnail'));
+        } elseif ($request->type === 'video' && $request->url) {
+            // Auto-fetch YouTube thumbnail
+            $ytId = self::youtubeId($request->url);
+            if ($ytId) {
+                $thumbPath = "https://img.youtube.com/vi/{$ytId}/hqdefault.jpg";
+            }
         }
 
         $files     = $request->file('files') ?? [];
@@ -58,7 +64,6 @@ class AgencyMediaController extends Controller
                 ]));
             }
         } else {
-            // No files — save as URL-only entry (e.g. website)
             $agency->media()->create(array_merge($base, [
                 'thumbnail'  => $thumbPath,
                 'sort_order' => $sortStart,
@@ -102,11 +107,22 @@ class AgencyMediaController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = 'uploads/agency_media/thumbs/' . uploadImage('uploads/agency_media/thumbs', $request->file('thumbnail'));
+        } elseif ($request->type === 'video' && $request->url && !$medium->thumbnail) {
+            $ytId = self::youtubeId($request->url);
+            if ($ytId) {
+                $data['thumbnail'] = "https://img.youtube.com/vi/{$ytId}/hqdefault.jpg";
+            }
         }
 
         $medium->update($data);
 
         return redirect()->route('admin.agencies.media.index', $agency)->with('success', 'تم تحديث الوسيط بنجاح.');
+    }
+
+    private static function youtubeId(string $url): ?string
+    {
+        preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([^&\s?#]+)/', $url, $m);
+        return $m[1] ?? null;
     }
 
     public function destroy(Agency $agency, AgencyMedia $medium)

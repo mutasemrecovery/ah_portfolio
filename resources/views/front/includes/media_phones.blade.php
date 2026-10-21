@@ -11,28 +11,33 @@
 <div class="phones" data-panel="v">
   @for($p = 0; $p < 5; $p++)
   @php
-    $item      = $videos->get($p);
-    $isVideo   = $item && $item->file_path &&
-                 preg_match('/\.(mp4|webm|mov|ogg|avi)$/i', $item->file_path);
+    $item     = $videos->get($p);
+    $isYt     = $item && $item->url && preg_match('/youtube\.com|youtu\.be/i', $item->url);
+    $isVideo  = !$isYt && $item && $item->file_path &&
+                preg_match('/\.(mp4|webm|mov|ogg|avi)$/i', $item->file_path);
+    $thumbSrc = $item && $item->thumbnail
+                  ? (str_starts_with($item->thumbnail, 'http') ? $item->thumbnail : asset($item->thumbnail))
+                  : null;
   @endphp
   <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"
-       @if($item && $item->file_path)
+       @if($isYt)
+         data-lightbox-type="youtube"
+         data-lightbox-src="{{ $item->url }}"
+         data-lightbox-title="{{ $item->{'title_' . $locale} ?? '' }}"
+       @elseif($item && $item->file_path)
          data-lightbox-type="{{ $isVideo ? 'video' : 'image' }}"
          data-lightbox-src="{{ asset($item->file_path) }}"
-         @if($item->thumbnail) data-lightbox-poster="{{ asset($item->thumbnail) }}" @endif
+         @if($thumbSrc) data-lightbox-poster="{{ $thumbSrc }}" @endif
          data-lightbox-title="{{ $item->{'title_' . $locale} ?? '' }}"
        @endif>
-    @if($item && $item->thumbnail)
-      {{-- Proper thumbnail image uploaded → always use it --}}
-      <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
+    @if($thumbSrc)
+      <img src="{{ $thumbSrc }}" alt="{{ $item->{'title_' . $locale} ?? '' }}" class="phone-media">
     @elseif($isVideo)
-      {{-- No thumbnail but we have a real video file → use <video> --}}
       <video class="phone-media" autoplay muted loop playsinline preload="metadata">
         <source src="{{ asset($item->file_path) }}">
       </video>
     @elseif($item && $item->file_path)
-      {{-- file_path is an image (poster/cover) --}}
-      <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} }}" class="phone-media">
+      <img src="{{ asset($item->file_path) }}" alt="{{ $item->{'title_' . $locale} ?? '' }}" class="phone-media">
     @else
       <span class="ph ph--phone" data-label="{{ $p === 2 ? __('front.media_featured') : __('front.media_item') }}"></span>
     @endif

@@ -66,10 +66,11 @@
                 <input type="file" name="thumbnail" class="form-control" accept="image/*">
                 <small class="text-muted">PNG, JPG — Max 2MB</small>
             </div>
-            <div class="col-12">
-                <label class="form-label">URL (للمواقع أو روابط YouTube)</label>
-                <input type="text" name="url" value="{{ old('url') }}" class="form-control"
+            <div class="col-12" id="url-wrap">
+                <label class="form-label" id="url-label">URL</label>
+                <input type="text" name="url" id="media-url" value="{{ old('url') }}" class="form-control"
                        placeholder="https://...">
+                <small class="text-muted" id="url-hint"></small>
             </div>
         </div>
     </div>
@@ -91,19 +92,48 @@
     const hintEl  = document.getElementById('files-hint');
     const wrapEl  = document.getElementById('files-wrap');
 
-    const cfg = {
-        video:           { accept: 'video/*,.mp4,.webm',          label: 'فيديوهات',           hint: 'MP4, WEBM — Max 20MB لكل ملف', show: true  },
-        image:           { accept: 'image/*,.jpg,.jpeg,.png,.gif', label: 'صور',                hint: 'JPG, PNG, GIF — Max 20MB لكل ملف', show: true  },
-        visual_identity: { accept: '.pdf,application/pdf',         label: 'ملفات PDF',          hint: 'PDF فقط — Max 20MB لكل ملف', show: true  },
-        website:         { accept: '',                             label: 'ملفات',              hint: '',                            show: false },
+    const urlWrapEl  = document.getElementById('url-wrap');
+    const urlLabelEl = document.getElementById('url-label');
+    const urlHintEl  = document.getElementById('url-hint');
+    const urlEl      = document.getElementById('media-url');
+
+    // file section config
+    const fileCfg = {
+        video:           { show: false },
+        image:           { accept: 'image/*,.jpg,.jpeg,.png,.gif', label: 'صور',       hint: 'JPG, PNG, GIF — Max 20MB لكل ملف', show: true },
+        visual_identity: { accept: '.pdf,application/pdf',         label: 'ملفات PDF', hint: 'PDF فقط — Max 20MB لكل ملف',       show: true },
+        website:         { show: false },
+    };
+
+    // url section config
+    const urlCfg = {
+        video:           { show: true,  label: 'رابط يوتيوب',     hint: 'الصق رابط الفيديو من يوتيوب — مثال: https://youtu.be/xxxxx', required: true  },
+        image:           { show: false, label: 'URL', hint: '', required: false },
+        visual_identity: { show: false, label: 'URL', hint: '', required: false },
+        website:         { show: true,  label: 'رابط الموقع',      hint: 'https://example.com',                                          required: true  },
     };
 
     typeEl.addEventListener('change', function () {
-        const c = cfg[this.value] || cfg.image;
-        fileEl.accept    = c.accept;
-        labelEl.textContent = c.label;
-        hintEl.textContent  = c.hint;
-        wrapEl.style.display = c.show ? '' : 'none';
+        const fc = fileCfg[this.value] || fileCfg.image;
+        if (fc.show) {
+            fileEl.accept        = fc.accept;
+            labelEl.textContent  = fc.label;
+            hintEl.textContent   = fc.hint;
+            wrapEl.style.display = '';
+        } else {
+            wrapEl.style.display = 'none';
+        }
+
+        const uc = urlCfg[this.value] || urlCfg.website;
+        if (uc.show) {
+            urlLabelEl.textContent  = uc.label;
+            urlHintEl.textContent   = uc.hint;
+            urlEl.required          = uc.required;
+            urlWrapEl.style.display = '';
+        } else {
+            urlEl.required          = false;
+            urlWrapEl.style.display = 'none';
+        }
     });
 
     typeEl.dispatchEvent(new Event('change'));

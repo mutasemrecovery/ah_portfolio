@@ -182,9 +182,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let items = [];
     let idx   = 0;
 
+    const ytId = url => {
+      const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([^&\s?#]+)/);
+      return m ? m[1] : null;
+    };
+
     const buildEl = phone => {
       let el;
-      if (phone.dataset.lightboxType === 'video') {
+      if (phone.dataset.lightboxType === 'youtube') {
+        const id = ytId(phone.dataset.lightboxSrc);
+        el = document.createElement('iframe');
+        el.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&color=white`;
+        el.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+        el.allowFullscreen = true;
+        el.className = 'lightbox__media lightbox__frame';
+      } else if (phone.dataset.lightboxType === 'video') {
         el = document.createElement('video');
         el.src = phone.dataset.lightboxSrc;
         if (phone.dataset.lightboxPoster) el.poster = phone.dataset.lightboxPoster;
