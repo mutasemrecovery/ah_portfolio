@@ -15,8 +15,6 @@
       @endif
     </a>
     <nav class="nav__links" aria-label="{{ __('front.nav_aria_main') }}">
-      <a href="#about" class="is-active">{{ __('front.nav_about') }}</a>
-      <a href="#clients">{{ __('front.clients_title') }}</a>
       @foreach($navAgencies as $agency)
         <a href="#{{ $agency->slug }}">{{ strtoupper($agency->{'name_' . $locale} ?? $agency->name_en) }}</a>
       @endforeach
