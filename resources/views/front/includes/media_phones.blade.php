@@ -8,7 +8,26 @@
 </div>
 
 {{-- Videos panel --}}
-<div class="phones" data-panel="v">
+@php
+$allVSlides = $videos->map(function($v) use ($locale) {
+    $isYt  = $v->url && preg_match('/youtube\.com|youtu\.be/i', $v->url);
+    $thumb = $v->thumbnail
+        ? (str_starts_with($v->thumbnail, 'http') ? $v->thumbnail : asset($v->thumbnail))
+        : null;
+    $lType = $isYt ? 'youtube'
+        : ($v->file_path && preg_match('/\.(mp4|webm|mov|ogg|avi)$/i', $v->file_path) ? 'video' : 'image');
+    $lSrc  = $isYt ? $v->url : ($v->file_path ? asset($v->file_path) : '');
+    return [
+        'thumbnail'      => $thumb ?? '',
+        'lightboxType'   => $lType,
+        'lightboxSrc'    => $lSrc,
+        'lightboxPoster' => $thumb ?? '',
+        'lightboxTitle'  => $v->{'title_' . $locale} ?? '',
+        'href'           => '',
+    ];
+})->filter(fn($s) => $s['lightboxSrc'])->values()->toArray();
+@endphp
+<div class="phones" data-panel="v" data-all-slides='@json($allVSlides)'>
   @for($p = 0; $p < 5; $p++)
   @php
     $item     = $videos->get($p);
@@ -46,7 +65,19 @@
 </div>
 
 {{-- Images panel --}}
-<div class="phones" data-panel="i" style="display:none">
+@php
+$allISlides = $images->filter(fn($v) => $v->file_path)->map(function($v) use ($locale) {
+    return [
+        'thumbnail'      => asset($v->file_path),
+        'lightboxType'   => 'image',
+        'lightboxSrc'    => asset($v->file_path),
+        'lightboxPoster' => '',
+        'lightboxTitle'  => $v->{'title_' . $locale} ?? '',
+        'href'           => '',
+    ];
+})->values()->toArray();
+@endphp
+<div class="phones" data-panel="i" style="display:none" data-all-slides='@json($allISlides)'>
   @for($p = 0; $p < 5; $p++)
   @php $item = $images->get($p); @endphp
   <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"

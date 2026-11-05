@@ -87,16 +87,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const phones = [...panel.querySelectorAll('.phone')];
     if (phones.length < 2) return;
 
-    const allSlides = phones.map(phone => ({
-      html: phone.innerHTML,
-      href: phone.dataset.href || '',
-      lightboxType: phone.dataset.lightboxType || '',
-      lightboxSrc: phone.dataset.lightboxSrc || '',
-      lightboxPoster: phone.dataset.lightboxPoster || '',
-      lightboxTitle: phone.dataset.lightboxTitle || ''
-    }));
-    const realSlides = allSlides.filter(slide => slide.lightboxSrc);
-    const slides = realSlides.length > 1 ? realSlides : allSlides;
+    const buildPhoneHtml = slide =>
+      slide.thumbnail
+        ? `<img src="${slide.thumbnail}" alt="${slide.lightboxTitle || ''}" class="phone-media">`
+        : `<span class="ph ph--phone"></span>`;
+
+    let slides;
+    if (panel.dataset.allSlides) {
+      try {
+        const all = JSON.parse(panel.dataset.allSlides);
+        if (all.length > 0) slides = all;
+      } catch (e) {}
+    }
+    if (!slides) {
+      const domSlides = phones.map(phone => ({
+        html:           phone.innerHTML,
+        href:           phone.dataset.href || '',
+        lightboxType:   phone.dataset.lightboxType || '',
+        lightboxSrc:    phone.dataset.lightboxSrc || '',
+        lightboxPoster: phone.dataset.lightboxPoster || '',
+        lightboxTitle:  phone.dataset.lightboxTitle || ''
+      }));
+      const real = domSlides.filter(s => s.lightboxSrc);
+      slides = real.length > 1 ? real : domSlides;
+    }
 
     if (slides.length < 2) return;
 
@@ -118,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (media) media.style.opacity = '0';
 
         setTimeout(() => {
-          phone.innerHTML = slide.html;
+          phone.innerHTML = slide.html !== undefined ? slide.html : buildPhoneHtml(slide);
           setDataset(phone, slide);
           const nextMedia = phone.querySelector('.phone-media, .ph--phone');
           if (nextMedia) {
