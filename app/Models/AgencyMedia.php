@@ -14,7 +14,7 @@ class AgencyMedia extends Model
     protected $fillable = [
         'agency_id', 'type', 'file_path', 'thumbnail',
         'title_en', 'title_ar', 'url',
-        'sort_order', 'is_active',
+        'sort_order', 'sector', 'is_active',
     ];
 
     protected $casts = ['is_active' => 'boolean'];

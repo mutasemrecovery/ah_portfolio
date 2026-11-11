@@ -41,6 +41,10 @@ return [
     'tab_visual_identity' => 'Visual Identity',
     'tab_websites'      => 'Websites',
 
+    // ── Sector filter ─────────────────────────────────────────────
+    'sector_filter_label' => 'Filter by industry',
+    'sector_all'          => 'All',
+
     // ── CTA ───────────────────────────────────────────────────────
     'cta_lead'          => 'Ready to grow your brand with us?',
     'cta_btn_text'      => 'Get In Touch',

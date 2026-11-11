@@ -36,6 +36,18 @@
                 @error('type')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-4">
+                <label class="form-label">القطاع</label>
+                <input type="text" name="sector" value="{{ old('sector') }}"
+                       class="form-control" list="sectors-datalist"
+                       placeholder="مثال: مطاعم، مطابخ، عيادات...">
+                <datalist id="sectors-datalist">
+                    @foreach($sectors as $s)
+                        <option value="{{ $s }}">
+                    @endforeach
+                </datalist>
+                <small class="text-muted">اختر من القائمة أو اكتب قطاعاً جديداً</small>
+            </div>
+            <div class="col-md-4">
                 <label class="form-label">الترتيب</label>
                 <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}" class="form-control" min="0">
             </div>

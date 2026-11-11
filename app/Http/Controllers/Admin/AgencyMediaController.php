@@ -9,15 +9,26 @@ use Illuminate\Http\Request;
 
 class AgencyMediaController extends Controller
 {
+    private function sectors(): \Illuminate\Support\Collection
+    {
+        return AgencyMedia::whereNotNull('sector')
+            ->where('sector', '!=', '')
+            ->orderBy('sector')
+            ->distinct()
+            ->pluck('sector');
+    }
+
     public function index(Agency $agency)
     {
-        $media = $agency->media()->orderByDesc('id')->get();
-        return view('admin.agency_media.index', compact('agency', 'media'));
+        $media   = $agency->media()->orderByDesc('id')->get();
+        $sectors = $this->sectors();
+        return view('admin.agency_media.index', compact('agency', 'media', 'sectors'));
     }
 
     public function create(Agency $agency)
     {
-        return view('admin.agency_media.create', compact('agency'));
+        $sectors = $this->sectors();
+        return view('admin.agency_media.create', compact('agency', 'sectors'));
     }
 
     public function store(Request $request, Agency $agency)
@@ -31,6 +42,7 @@ class AgencyMediaController extends Controller
             'files.*'     => 'file|mimes:jpg,jpeg,png,gif,mp4,webm,pdf|max:20480',
             'thumbnail'   => 'nullable|image|max:2048',
             'sort_order'  => 'nullable|integer|min:0',
+            'sector'      => 'nullable|string|max:100',
         ]);
 
         $base = [
@@ -38,6 +50,7 @@ class AgencyMediaController extends Controller
             'title_en'  => $request->title_en,
             'title_ar'  => $request->title_ar,
             'url'       => $request->url,
+            'sector'    => $request->sector ?: null,
             'is_active' => $request->boolean('is_active', true),
         ];
 
@@ -45,7 +58,6 @@ class AgencyMediaController extends Controller
         if ($request->hasFile('thumbnail')) {
             $thumbPath = 'uploads/agency_media/thumbs/' . uploadImage('uploads/agency_media/thumbs', $request->file('thumbnail'));
         } elseif ($request->type === 'video' && $request->url) {
-            // Auto-fetch YouTube thumbnail
             $ytId = self::youtubeId($request->url);
             if ($ytId) {
                 $thumbPath = "https://img.youtube.com/vi/{$ytId}/hqdefault.jpg";
@@ -77,7 +89,8 @@ class AgencyMediaController extends Controller
 
     public function edit(Agency $agency, AgencyMedia $medium)
     {
-        return view('admin.agency_media.edit', compact('agency', 'medium'));
+        $sectors = $this->sectors();
+        return view('admin.agency_media.edit', compact('agency', 'medium', 'sectors'));
     }
 
     public function update(Request $request, Agency $agency, AgencyMedia $medium)
@@ -90,6 +103,7 @@ class AgencyMediaController extends Controller
             'file'       => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,webm|max:20480',
             'thumbnail'  => 'nullable|image|max:2048',
             'sort_order' => 'nullable|integer|min:0',
+            'sector'     => 'nullable|string|max:100',
         ]);
 
         $data = [
@@ -98,6 +112,7 @@ class AgencyMediaController extends Controller
             'title_ar'   => $request->title_ar,
             'url'        => $request->url,
             'sort_order' => $request->sort_order ?? 0,
+            'sector'     => $request->sector ?: null,
             'is_active'  => $request->boolean('is_active', true),
         ];
 
@@ -117,6 +132,13 @@ class AgencyMediaController extends Controller
         $medium->update($data);
 
         return redirect()->route('admin.agencies.media.index', $agency)->with('success', 'تم تحديث الوسيط بنجاح.');
+    }
+
+    public function patchSector(Request $request, Agency $agency, AgencyMedia $medium)
+    {
+        $request->validate(['sector' => 'nullable|string|max:100']);
+        $medium->update(['sector' => $request->sector ?: null]);
+        return back()->with('success', 'تم تحديث القطاع.');
     }
 
     private static function youtubeId(string $url): ?string

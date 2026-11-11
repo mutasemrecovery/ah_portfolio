@@ -50,6 +50,7 @@
                         <th>النوع</th>
                         <th>العنوان</th>
                         <th>الملف / URL</th>
+                        <th>القطاع</th>
                         <th>الحالة</th>
                         <th>الإجراءات</th>
                     </tr>
@@ -78,6 +79,20 @@
                             @endif
                         </td>
                         <td>
+                            <form action="{{ route('admin.agencies.media.patchSector', [$agency, $item]) }}" method="POST">
+                                @csrf @method('PATCH')
+                                <select name="sector" class="sector-inline" onchange="this.form.submit()" title="تغيير القطاع">
+                                    <option value="">— بلا —</option>
+                                    @foreach($sectors as $s)
+                                        <option value="{{ $s }}" {{ $item->sector === $s ? 'selected' : '' }}>{{ $s }}</option>
+                                    @endforeach
+                                    @if($item->sector && !$sectors->contains($item->sector))
+                                        <option value="{{ $item->sector }}" selected>{{ $item->sector }}</option>
+                                    @endif
+                                </select>
+                            </form>
+                        </td>
+                        <td>
                             @if($item->is_active)
                                 <span class="pill pill-success">نشط</span>
                             @else
@@ -99,7 +114,7 @@
                     </tr>
                     @empty
                     <tr id="empty-row">
-                        <td colspan="6" class="text-center text-muted py-4">
+                        <td colspan="7" class="text-center text-muted py-4">
                             <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                             لا توجد أعمال
                         </td>
@@ -113,6 +128,19 @@
 
 @push('styles')
 <style>
+.sector-inline {
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1.5px solid #dee2e6;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    cursor: pointer;
+    min-width: 100px;
+    transition: border-color .2s;
+}
+.sector-inline:hover, .sector-inline:focus { border-color: #6c5ce7; outline: none; }
 .filter-btn {
     padding: 6px 16px;
     border-radius: 20px;

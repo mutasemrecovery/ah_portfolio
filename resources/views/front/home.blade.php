@@ -160,6 +160,21 @@
   @endif
 </section> --}}
 
+<!-- ================= SECTOR FILTER ================= -->
+@if(isset($allSectors) && $allSectors->isNotEmpty())
+<section class="sector-filter" id="sector-filter" aria-label="{{ __('front.sector_filter_label') }}">
+  <div class="sector-filter__inner">
+    <span class="sector-filter__label">{{ __('front.sector_filter_label') }}</span>
+    <div class="sector-filter__pills" role="group">
+      <button class="sector-pill is-active" data-sector="all">{{ __('front.sector_all') }}</button>
+      @foreach($allSectors as $sector)
+        <button class="sector-pill" data-sector="{{ $sector }}">{{ $sector }}</button>
+      @endforeach
+    </div>
+  </div>
+</section>
+@endif
+
 <!-- ================= AGENCY SHOWCASES ================= -->
 @foreach($agencies as $index => $agency)
 @php
@@ -171,9 +186,15 @@
       ->flatMap(fn($itemAgency) => ($itemAgency->media ?? collect())->where('type', 'visual_identity'))
       ->sortBy('sort_order')
       ->values();
+  $agencySectors = ($agency->media ?? collect())
+      ->pluck('sector')
+      ->filter(fn($s) => (bool) $s)
+      ->unique()
+      ->implode(',');
 @endphp
 
-<section class="showcase showcase--{{ $isEven ? 'even' : 'odd' }} showcase--{{ $agency->slug }}" id="{{ $agency->slug }}">
+<section class="showcase showcase--{{ $isEven ? 'even' : 'odd' }} showcase--{{ $agency->slug }}" id="{{ $agency->slug }}"
+         data-agency-section data-agency-sectors="{{ $agencySectors }}">
   @if($isEven)
   <div class="octo octo--recovery float">
     @if($setting('showcase_octo_image'))

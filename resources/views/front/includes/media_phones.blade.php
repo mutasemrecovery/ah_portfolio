@@ -24,6 +24,7 @@ $allVSlides = $videos->map(function($v) use ($locale) {
         'lightboxPoster' => $thumb ?? '',
         'lightboxTitle'  => $v->{'title_' . $locale} ?? '',
         'href'           => '',
+        'sector'         => $v->sector ?? '',
     ];
 })->filter(fn($s) => $s['lightboxSrc'])->values()->toArray();
 @endphp
@@ -74,6 +75,7 @@ $allISlides = $images->filter(fn($v) => $v->file_path)->map(function($v) use ($l
         'lightboxPoster' => '',
         'lightboxTitle'  => $v->{'title_' . $locale} ?? '',
         'href'           => '',
+        'sector'         => $v->sector ?? '',
     ];
 })->values()->toArray();
 @endphp
@@ -104,7 +106,8 @@ $allISlides = $images->filter(fn($v) => $v->file_path)->map(function($v) use ($l
     <div class="pdf-card {{ $i > 0 ? 'pdf-card--hidden' : '' }}"
          data-lightbox-type="website"
          data-lightbox-src="{{ asset($item->file_path) }}"
-         data-lightbox-title="{{ $item->{'title_' . $locale} ?? $item->title_en ?? '' }}">
+         data-lightbox-title="{{ $item->{'title_' . $locale} ?? $item->title_en ?? '' }}"
+         data-sector="{{ $item->sector ?? '' }}">
       <div class="pdf-card__page">
         <div class="pdf-card__fold"></div>
         <div class="pdf-card__lines">
@@ -143,7 +146,25 @@ $allISlides = $images->filter(fn($v) => $v->file_path)->map(function($v) use ($l
 </div>
 
 {{-- Websites panel --}}
-<div class="phones" data-panel="w" style="display:none">
+@php
+$allWSlides = $websites->filter(fn($v) => $v->url)->map(function($v) use ($locale) {
+    $thumb  = $v->thumbnail
+        ? (str_starts_with($v->thumbnail, 'http') ? $v->thumbnail : asset($v->thumbnail))
+        : null;
+    $domain = parse_url($v->url, PHP_URL_HOST) ?? $v->url;
+    return [
+        'thumbnail'      => $thumb ?? '',
+        'domain'         => $domain,
+        'lightboxType'   => 'website',
+        'lightboxSrc'    => $v->url,
+        'lightboxPoster' => '',
+        'lightboxTitle'  => $v->{'title_' . $locale} ?? '',
+        'href'           => $v->url,
+        'sector'         => $v->sector ?? '',
+    ];
+})->values()->toArray();
+@endphp
+<div class="phones" data-panel="w" style="display:none" data-all-slides='@json($allWSlides)'>
   @for($p = 0; $p < 5; $p++)
   @php $item = $websites->get($p); @endphp
   <div class="phone phone--{{ ['a','b','c','d','e'][$p] }} {{ $p === 2 ? 'play' : '' }}"

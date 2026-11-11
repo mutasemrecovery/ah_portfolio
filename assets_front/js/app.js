@@ -87,10 +87,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const phones = [...panel.querySelectorAll('.phone')];
     if (phones.length < 2) return;
 
-    const buildPhoneHtml = slide =>
-      slide.thumbnail
-        ? `<img src="${slide.thumbnail}" alt="${slide.lightboxTitle || ''}" class="phone-media">`
-        : `<span class="ph ph--phone"></span>`;
+    const buildPhoneHtml = slide => {
+      if (slide.thumbnail) {
+        return `<img src="${slide.thumbnail}" alt="${slide.lightboxTitle || ''}" class="phone-media">`;
+      }
+      if (slide.domain) {
+        return `<div class="phone-media phone-site">` +
+          `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5">` +
+          `<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>` +
+          `</svg><span class="phone-site__domain">${slide.domain}</span></div>`;
+      }
+      return `<span class="ph ph--phone"></span>`;
+    };
 
     let slides;
     if (panel.dataset.allSlides) {
@@ -114,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (slides.length < 2) return;
 
+    const allServerSlides = slides.slice();
     let idx = 0;
     let timer = null;
 
@@ -155,25 +164,70 @@ document.addEventListener('DOMContentLoaded', () => {
     panel.addEventListener('phones:show', start);
     panel.addEventListener('phones:hide', stop);
 
+    panel.addEventListener('sector:filter', e => {
+      stop();
+      const sector = e.detail.sector;
+      const filtered = sector === 'all'
+        ? allServerSlides
+        : allServerSlides.filter(s => !s.sector || s.sector === sector);
+      slides = filtered.length > 0 ? filtered : [];
+      idx = 0;
+      if (slides.length === 0) {
+        phones.forEach(phone => {
+          phone.innerHTML = '<span class="ph ph--phone"></span>';
+          ['href', 'lightboxType', 'lightboxSrc', 'lightboxPoster', 'lightboxTitle'].forEach(k => delete phone.dataset[k]);
+        });
+        return;
+      }
+      phones.forEach((phone, i) => {
+        const slide = slides[i % slides.length];
+        phone.innerHTML = slide.html !== undefined ? slide.html : buildPhoneHtml(slide);
+        setDataset(phone, slide);
+        const m = phone.querySelector('.phone-media, .ph--phone');
+        if (m) { m.style.opacity = '0'; requestAnimationFrame(() => { m.style.opacity = '1'; }); }
+      });
+      if (slides.length > 1 && panel.style.display !== 'none') start();
+    });
+
     if (panel.style.display !== 'none') start();
   });
 
   /* ---- PDF Cards navigation (Visual Identity) ---- */
   document.querySelectorAll('.pdf-shelf').forEach(shelf => {
-    const cards   = [...shelf.querySelectorAll('.pdf-card')];
-    const counter = shelf.querySelector('.pdf-shelf__counter');
-    if (cards.length < 2) return;
+    const allCards = [...shelf.querySelectorAll('.pdf-card')];
+    const counter  = shelf.querySelector('.pdf-shelf__counter');
+    const nav      = shelf.querySelector('.pdf-shelf__nav');
 
+    let visibleCards = allCards;
     let idx = 0;
 
     const show = i => {
-      idx = (i + cards.length) % cards.length;
-      cards.forEach((c, j) => c.classList.toggle('pdf-card--hidden', j !== idx));
-      if (counter) counter.textContent = (idx + 1) + ' / ' + cards.length;
+      if (visibleCards.length === 0) return;
+      idx = ((i % visibleCards.length) + visibleCards.length) % visibleCards.length;
+      allCards.forEach(c => c.classList.add('pdf-card--hidden'));
+      visibleCards[idx].classList.remove('pdf-card--hidden');
+      if (counter) counter.textContent = `${idx + 1} / ${visibleCards.length}`;
+      if (nav) nav.style.display = visibleCards.length > 1 ? '' : 'none';
     };
 
     shelf.querySelector('.pdf-shelf__btn--prev')?.addEventListener('click', () => show(idx - 1));
     shelf.querySelector('.pdf-shelf__btn--next')?.addEventListener('click', () => show(idx + 1));
+
+    shelf.addEventListener('sector:filter', e => {
+      const sector = e.detail.sector;
+      visibleCards = sector === 'all'
+        ? allCards
+        : allCards.filter(c => !c.dataset.sector || c.dataset.sector === sector);
+      if (visibleCards.length === 0) {
+        allCards.forEach(c => c.classList.add('pdf-card--hidden'));
+        if (counter) counter.textContent = '';
+        if (nav) nav.style.display = 'none';
+      } else {
+        show(0);
+      }
+    });
+
+    show(0);
   });
 
   /* ---- Lightbox with prev/next navigation ---- */
@@ -277,5 +331,33 @@ document.addEventListener('DOMContentLoaded', () => {
       open(allItems, start >= 0 ? start : 0);
     });
   })();
+
+  /* ---- Sector filter ---- */
+  const sectorBtns = [...document.querySelectorAll('.sector-pill')];
+  if (sectorBtns.length) {
+    sectorBtns.forEach(btn => btn.addEventListener('click', () => {
+      sectorBtns.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const sector = btn.dataset.sector;
+
+      document.querySelectorAll('[data-panel]').forEach(panel => {
+        panel.dispatchEvent(new CustomEvent('sector:filter', { detail: { sector } }));
+      });
+
+      document.querySelectorAll('[data-agency-section]').forEach(section => {
+        if (sector === 'all') {
+          section.classList.remove('showcase--hidden');
+        } else {
+          const sectors = (section.dataset.agencySectors || '').split(',').filter(Boolean);
+          section.classList.toggle('showcase--hidden', !sectors.includes(sector));
+        }
+      });
+
+      if (sector !== 'all') {
+        const first = document.querySelector('[data-agency-section]:not(.showcase--hidden)');
+        if (first) setTimeout(() => first.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+      }
+    }));
+  }
 
 });

@@ -102,6 +102,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::post('agencies/{agency}/media',                         [AgencyMediaController::class, 'store'])->name('admin.agencies.media.store');
         Route::get('agencies/{agency}/media/{medium}/edit',            [AgencyMediaController::class, 'edit'])->name('admin.agencies.media.edit');
         Route::put('agencies/{agency}/media/{medium}',                 [AgencyMediaController::class, 'update'])->name('admin.agencies.media.update');
+        Route::patch('agencies/{agency}/media/{medium}/sector',        [AgencyMediaController::class, 'patchSector'])->name('admin.agencies.media.patchSector');
         Route::delete('agencies/{agency}/media/{medium}',              [AgencyMediaController::class, 'destroy'])->name('admin.agencies.media.destroy');
 
         // Clients

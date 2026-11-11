@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HeroSection;
 use App\Models\Agency;
 use App\Models\AboutSection;
+use App\Models\AgencyMedia;
 use App\Models\Client;
 use App\Models\SiteSetting;
 
@@ -23,8 +24,15 @@ class HomeController extends Controller
         $clients  = Client::active()->get();
         $settings = SiteSetting::all()->keyBy('key');
 
+        $allSectors = AgencyMedia::where('is_active', true)
+            ->whereNotNull('sector')
+            ->where('sector', '!=', '')
+            ->orderBy('sector')
+            ->distinct()
+            ->pluck('sector');
+
         return view('front.home', compact(
-      'hero', 'agencies', 'about', 'clients', 'settings'
+            'hero', 'agencies', 'about', 'clients', 'settings', 'allSectors'
         ));
     }
 

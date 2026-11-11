@@ -41,6 +41,10 @@ return [
     'tab_visual_identity' => 'Visual Identity',
     'tab_websites'      => 'مواقع',
 
+    // ── Sector filter ─────────────────────────────────────────────
+    'sector_filter_label' => 'تصفية حسب القطاع',
+    'sector_all'          => 'الكل',
+
     // ── CTA ───────────────────────────────────────────────────────
     'cta_lead'          => 'هل أنت مستعد لتنمية علامتك التجارية معنا؟',
     'cta_btn_text'      => 'تواصل معنا',
