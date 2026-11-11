@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\AboutSectionController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\AgencyServiceController;
 use App\Http\Controllers\Admin\AgencyMediaController;
+use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\ConductDocumentController;
 use App\Http\Controllers\Admin\SchoolClassController;
@@ -104,6 +105,11 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::put('agencies/{agency}/media/{medium}',                 [AgencyMediaController::class, 'update'])->name('admin.agencies.media.update');
         Route::patch('agencies/{agency}/media/{medium}/sector',        [AgencyMediaController::class, 'patchSector'])->name('admin.agencies.media.patchSector');
         Route::delete('agencies/{agency}/media/{medium}',              [AgencyMediaController::class, 'destroy'])->name('admin.agencies.media.destroy');
+
+        // Sectors
+        Route::get('sectors',              [SectorController::class, 'index'])->name('admin.sectors.index');
+        Route::post('sectors',             [SectorController::class, 'store'])->name('admin.sectors.store');
+        Route::delete('sectors/{sector}',  [SectorController::class, 'destroy'])->name('admin.sectors.destroy');
 
         // Clients
         Route::get('clients',                  [ClientController::class, 'index'])->name('admin.clients.index');

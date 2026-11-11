@@ -5,17 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Agency;
 use App\Models\AgencyMedia;
+use App\Models\Sector;
 use Illuminate\Http\Request;
 
 class AgencyMediaController extends Controller
 {
     private function sectors(): \Illuminate\Support\Collection
     {
-        return AgencyMedia::whereNotNull('sector')
-            ->where('sector', '!=', '')
-            ->orderBy('sector')
-            ->distinct()
-            ->pluck('sector');
+        return Sector::orderBy('name')->pluck('name');
     }
 
     public function index(Agency $agency)
