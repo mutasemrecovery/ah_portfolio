@@ -253,6 +253,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.createElement('div');
     overlay.className = 'vgrid';
 
+    const vgridSectors = [...new Set(vidSlides.map(s => s.sector).filter(Boolean))].sort();
+    const sectorsBar = vgridSectors.length
+      ? '<div class="vgrid__sectors">' +
+          '<button class="vgrid__spill is-active" data-vsector="all">الكل</button>' +
+          vgridSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${sec}</button>`).join('') +
+        '</div>'
+      : '';
+
     overlay.innerHTML =
       '<div class="vgrid__header">' +
         '<h3 class="vgrid__title">فيديوهات</h3>' +
@@ -264,10 +272,11 @@ document.addEventListener('DOMContentLoaded', () => {
         '</div>' +
         '<button class="vgrid__close" aria-label="Close">&#x2715;</button>' +
       '</div>' +
+      sectorsBar +
       '<div class="vgrid__body">' +
         '<div class="vgrid__grid">' +
           vidSlides.map((s, i) =>
-            `<button class="vgrid__card" data-idx="${i}" data-title="${(s.lightboxTitle || '').toLowerCase()}" type="button">` +
+            `<button class="vgrid__card" data-idx="${i}" data-title="${(s.lightboxTitle || '').toLowerCase()}" data-sector="${s.sector || ''}" type="button">` +
               `<div class="vgrid__thumb-wrap">` +
                 (s.thumbnail
                   ? `<img src="${s.thumbnail}" alt="" class="vgrid__thumb" loading="lazy">`
@@ -289,21 +298,34 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => overlay.classList.add('is-open'));
 
-    const searchInput = overlay.querySelector('.vgrid__search');
-    const cards       = [...overlay.querySelectorAll('.vgrid__card')];
-    const emptyMsg    = overlay.querySelector('.vgrid__empty');
-    let searchTimer   = null;
+    const searchInput  = overlay.querySelector('.vgrid__search');
+    const cards        = [...overlay.querySelectorAll('.vgrid__card')];
+    const emptyMsg     = overlay.querySelector('.vgrid__empty');
+    const spills       = [...overlay.querySelectorAll('.vgrid__spill')];
+    let searchTimer    = null;
+    let activeSector   = 'all';
 
-    const filterCards = query => {
-      const q = query.toLowerCase().trim();
+    const filterCards = (query, sector) => {
+      const q = (query || '').toLowerCase().trim();
+      if (sector !== undefined) activeSector = sector;
       let visible = 0;
       cards.forEach(card => {
-        const match = !q || card.dataset.title.includes(q);
+        const titleMatch  = !q || card.dataset.title.includes(q);
+        const sectorMatch = activeSector === 'all' || card.dataset.sector === activeSector;
+        const match = titleMatch && sectorMatch;
         card.style.display = match ? '' : 'none';
         if (match) visible++;
       });
       emptyMsg.hidden = visible > 0;
     };
+
+    spills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        spills.forEach(p => p.classList.remove('is-active'));
+        pill.classList.add('is-active');
+        filterCards(searchInput.value, pill.dataset.vsector);
+      });
+    });
 
     searchInput.addEventListener('input', () => {
       const q = searchInput.value;

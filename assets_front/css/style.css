@@ -2069,6 +2069,42 @@ section {
   margin: 0;
 }
 
+.vgrid__sectors {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  background: rgba(0, 0, 0, .15);
+}
+
+.vgrid__spill {
+  padding: 5px 16px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(255, 255, 255, .18);
+  background: transparent;
+  color: rgba(255, 255, 255, .72);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+
+.vgrid__spill:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: rgba(251, 172, 67, .08);
+}
+
+.vgrid__spill.is-active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--navy);
+}
+
 .vgrid__search-wrap {
   flex: 1;
   position: relative;
