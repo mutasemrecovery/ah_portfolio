@@ -10,7 +10,7 @@ return [
 
     // ── Footer ────────────────────────────────────────────────────
     'footer_contact'    => 'Contact',
-    'footer_social'     => 'Social',
+    'footer_social'     => 'Our Social Media Platform',
 
     // ── Media placeholders ────────────────────────────────────────
     'media_featured'    => 'Featured media',

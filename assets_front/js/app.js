@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- Phone carousel: cycles media through the phone cluster ---- */
   const CAROUSEL_INTERVAL = 3200;
+  let lbOpen = null; // assigned by lightbox IIFE below
 
   document.querySelectorAll('[data-panel]').forEach(panel => {
     const phones = [...panel.querySelectorAll('.phone')];
@@ -123,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (slides.length < 2) return;
 
     const allServerSlides = slides.slice();
+    panel._slides = slides.slice(); // tracked for video grid
     let idx = 0;
     let timer = null;
 
@@ -171,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ? allServerSlides
         : allServerSlides.filter(s => !s.sector || s.sector === sector);
       slides = filtered.length > 0 ? filtered : [];
+      panel._slides = slides.slice(); // keep grid in sync
       idx = 0;
       if (slides.length === 0) {
         phones.forEach(phone => {
@@ -229,6 +232,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
     show(0);
   });
+
+  /* ---- Video grid: slideToFakePhone converts raw slides to lightbox-compatible items ---- */
+  const slideToFakePhone = slide => ({
+    dataset: {
+      lightboxType:   slide.lightboxType   || '',
+      lightboxSrc:    slide.lightboxSrc    || '',
+      lightboxPoster: slide.lightboxPoster || slide.thumbnail || '',
+      lightboxTitle:  slide.lightboxTitle  || '',
+      href:           slide.href           || '',
+    }
+  });
+
+  const openVideoGrid = panel => {
+    const vidSlides = (panel._slides || []).filter(
+      s => s.lightboxSrc && (s.lightboxType === 'youtube' || s.lightboxType === 'video')
+    );
+    if (vidSlides.length === 0 || !lbOpen) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'vgrid';
+
+    overlay.innerHTML =
+      '<div class="vgrid__header">' +
+        '<h3 class="vgrid__title">فيديوهات</h3>' +
+        '<button class="vgrid__close" aria-label="Close">&#x2715;</button>' +
+      '</div>' +
+      '<div class="vgrid__body">' +
+        '<div class="vgrid__grid">' +
+          vidSlides.map((s, i) =>
+            `<button class="vgrid__card" data-idx="${i}" type="button">` +
+              `<div class="vgrid__thumb-wrap">` +
+                (s.thumbnail
+                  ? `<img src="${s.thumbnail}" alt="" class="vgrid__thumb" loading="lazy">`
+                  : `<div class="vgrid__thumb"></div>`) +
+                `<div class="vgrid__play">` +
+                  `<div class="vgrid__play-icon">` +
+                    `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>` +
+                  `</div>` +
+                `</div>` +
+              `</div>` +
+              (s.lightboxTitle ? `<p class="vgrid__label">${s.lightboxTitle}</p>` : '') +
+            `</button>`
+          ).join('') +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => overlay.classList.add('is-open'));
+
+    const closeGrid = (keepOverflow = false) => {
+      overlay.classList.remove('is-open');
+      setTimeout(() => {
+        overlay.remove();
+        if (!keepOverflow) document.body.style.overflow = '';
+      }, 260);
+    };
+
+    overlay.querySelector('.vgrid__close').addEventListener('click', () => closeGrid());
+
+    document.addEventListener('keydown', function escGrid(e) {
+      if (e.key === 'Escape') { closeGrid(); document.removeEventListener('keydown', escGrid); }
+    });
+
+    overlay.querySelectorAll('.vgrid__card').forEach(card => {
+      card.addEventListener('click', () => {
+        const startIdx = parseInt(card.dataset.idx);
+        closeGrid(true); // keep overflow hidden — lightbox takes over
+        setTimeout(() => lbOpen(vidSlides.map(slideToFakePhone), startIdx), 270);
+      });
+    });
+  };
 
   /* ---- Lightbox with prev/next navigation ---- */
   (() => {
@@ -322,6 +397,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = e.target.closest('.phone[data-lightbox-src], .pdf-card[data-lightbox-src]');
       if (!target) return;
 
+      // Video phones → open grid gallery instead of direct lightbox
+      if (target.classList.contains('phone') &&
+          (target.dataset.lightboxType === 'youtube' || target.dataset.lightboxType === 'video')) {
+        const vPanel = target.closest('[data-panel="v"]');
+        if (vPanel) { openVideoGrid(vPanel); return; }
+      }
+
       const panel    = target.closest('[data-panel]');
       const allItems = panel
         ? [...panel.querySelectorAll('.phone[data-lightbox-src], .pdf-card[data-lightbox-src]')]
@@ -330,15 +412,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       open(allItems, start >= 0 ? start : 0);
     });
+
+    lbOpen = open; // expose to openVideoGrid
   })();
 
   /* ---- Sector filter ---- */
+  let suppressHistory = false;
   const sectorBtns = [...document.querySelectorAll('.sector-pill')];
   if (sectorBtns.length) {
     sectorBtns.forEach(btn => btn.addEventListener('click', () => {
       sectorBtns.forEach(b => b.classList.remove('is-active'));
       btn.classList.add('is-active');
       const sector = btn.dataset.sector;
+
+      // Sync URL
+      if (!suppressHistory) {
+        const url = new URL(window.location);
+        if (sector === 'all') url.searchParams.delete('sector');
+        else url.searchParams.set('sector', sector);
+        history.pushState({ sector }, '', url);
+      }
 
       document.querySelectorAll('[data-panel]').forEach(panel => {
         panel.dispatchEvent(new CustomEvent('sector:filter', { detail: { sector } }));
@@ -358,6 +451,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (first) setTimeout(() => first.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
       }
     }));
+
+    // Apply sector from URL on page load
+    const urlSector = new URLSearchParams(window.location.search).get('sector');
+    if (urlSector) {
+      const btn = document.querySelector(`.sector-pill[data-sector="${CSS.escape(urlSector)}"]`);
+      if (btn) { suppressHistory = true; btn.click(); suppressHistory = false; }
+    }
+
+    // Handle browser back/forward
+    window.addEventListener('popstate', e => {
+      const sector = (e.state && e.state.sector)
+        || new URLSearchParams(window.location.search).get('sector')
+        || 'all';
+      const btn = document.querySelector(`.sector-pill[data-sector="${CSS.escape(sector)}"]`);
+      if (btn) { suppressHistory = true; btn.click(); suppressHistory = false; }
+    });
   }
 
 });
