@@ -2215,6 +2215,43 @@ section {
   color: var(--navy);
 }
 
+.sector-search-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sector-search-icon {
+  position: absolute;
+  inset-inline-start: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, .4);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.sector-search {
+  padding: 7px 14px;
+  padding-inline-start: 36px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  width: 200px;
+  transition: border-color .2s, background .2s, width .25s;
+}
+
+.sector-search::placeholder { color: rgba(255, 255, 255, .35); }
+.sector-search:focus {
+  border-color: var(--orange);
+  background: rgba(255, 255, 255, .1);
+  width: 260px;
+}
+
 .showcase--hidden {
   display: none !important;
 }

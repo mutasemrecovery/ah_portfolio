@@ -166,14 +166,19 @@ document.addEventListener('DOMContentLoaded', () => {
     panel.addEventListener('phones:show', start);
     panel.addEventListener('phones:hide', stop);
 
-    panel.addEventListener('sector:filter', e => {
+    let panelSector = 'all';
+    let panelSearch = '';
+
+    const applyPanelFilter = () => {
       stop();
-      const sector = e.detail.sector;
-      const filtered = sector === 'all'
-        ? allServerSlides
-        : allServerSlides.filter(s => !s.sector || s.sector === sector);
+      const q = panelSearch.toLowerCase().trim();
+      const filtered = allServerSlides.filter(s => {
+        const sectorMatch = panelSector === 'all' || !s.sector || s.sector === panelSector;
+        const titleMatch  = !q || (s.lightboxTitle || '').toLowerCase().includes(q);
+        return sectorMatch && titleMatch;
+      });
       slides = filtered.length > 0 ? filtered : [];
-      panel._slides = slides.slice(); // keep grid in sync
+      panel._slides = slides.slice();
       idx = 0;
       if (slides.length === 0) {
         phones.forEach(phone => {
@@ -190,7 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (m) { m.style.opacity = '0'; requestAnimationFrame(() => { m.style.opacity = '1'; }); }
       });
       if (slides.length > 1 && panel.style.display !== 'none') start();
-    });
+    };
+
+    panel.addEventListener('sector:filter', e => { panelSector = e.detail.sector; applyPanelFilter(); });
+    panel.addEventListener('search:filter', e => { panelSearch = e.detail.query || ''; applyPanelFilter(); });
 
     if (panel.style.display !== 'none') start();
   });
@@ -216,11 +224,16 @@ document.addEventListener('DOMContentLoaded', () => {
     shelf.querySelector('.pdf-shelf__btn--prev')?.addEventListener('click', () => show(idx - 1));
     shelf.querySelector('.pdf-shelf__btn--next')?.addEventListener('click', () => show(idx + 1));
 
-    shelf.addEventListener('sector:filter', e => {
-      const sector = e.detail.sector;
-      visibleCards = sector === 'all'
-        ? allCards
-        : allCards.filter(c => !c.dataset.sector || c.dataset.sector === sector);
+    let shelfSector = 'all';
+    let shelfSearch = '';
+
+    const applyShelfFilter = () => {
+      const q = shelfSearch.toLowerCase().trim();
+      visibleCards = allCards.filter(c => {
+        const sectorMatch = shelfSector === 'all' || !c.dataset.sector || c.dataset.sector === shelfSector;
+        const titleMatch  = !q || c.textContent.toLowerCase().includes(q);
+        return sectorMatch && titleMatch;
+      });
       if (visibleCards.length === 0) {
         allCards.forEach(c => c.classList.add('pdf-card--hidden'));
         if (counter) counter.textContent = '';
@@ -228,7 +241,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         show(0);
       }
-    });
+    };
+
+    shelf.addEventListener('sector:filter', e => { shelfSector = e.detail.sector; applyShelfFilter(); });
+    shelf.addEventListener('search:filter', e => { shelfSearch = e.detail.query || ''; applyShelfFilter(); });
 
     show(0);
   });
@@ -531,6 +547,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const btn = document.querySelector(`.sector-pill[data-sector="${CSS.escape(sector)}"]`);
       if (btn) { suppressHistory = true; btn.click(); suppressHistory = false; }
     });
+  }
+
+  // Sector bar text search
+  const sectorSearchEl = document.getElementById('sector-search');
+  if (sectorSearchEl) {
+    const dispatchSearch = q => {
+      document.querySelectorAll('[data-panel]').forEach(p =>
+        p.dispatchEvent(new CustomEvent('search:filter', { detail: { query: q } }))
+      );
+      document.querySelectorAll('.pdf-shelf').forEach(s =>
+        s.dispatchEvent(new CustomEvent('search:filter', { detail: { query: q } }))
+      );
+    };
+    let sbarTimer = null;
+    sectorSearchEl.addEventListener('input', () => {
+      const q = sectorSearchEl.value;
+      dispatchSearch(q);
+      clearTimeout(sbarTimer);
+      sbarTimer = setTimeout(() => {
+        const url = new URL(window.location);
+        if (q.trim()) url.searchParams.set('q', q);
+        else url.searchParams.delete('q');
+        history.replaceState(history.state, '', url);
+      }, 350);
+    });
+    const urlQ = new URLSearchParams(window.location.search).get('q');
+    if (urlQ) { sectorSearchEl.value = urlQ; setTimeout(() => dispatchSearch(urlQ), 100); }
   }
 
   // Auto-open video grid if ?search= is present in URL

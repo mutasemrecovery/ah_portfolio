@@ -171,6 +171,13 @@
         <button class="sector-pill" data-sector="{{ $sector }}">{{ $sector }}</button>
       @endforeach
     </div>
+    <div class="sector-search-wrap">
+      <svg class="sector-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="search" id="sector-search" class="sector-search"
+             placeholder="{{ app()->getLocale() === 'ar' ? 'ابحث...' : 'Search...' }}">
+    </div>
   </div>
 </section>
 @endif
