@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const openVideoGrid = panel => {
+  const openVideoGrid = (panel, initialSearch = '') => {
     const vidSlides = (panel._slides || []).filter(
       s => s.lightboxSrc && (s.lightboxType === 'youtube' || s.lightboxType === 'video')
     );
@@ -256,12 +256,18 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.innerHTML =
       '<div class="vgrid__header">' +
         '<h3 class="vgrid__title">فيديوهات</h3>' +
+        '<div class="vgrid__search-wrap">' +
+          '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
+            '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
+          '</svg>' +
+          '<input type="search" class="vgrid__search" placeholder="ابحث عن فيديو...">' +
+        '</div>' +
         '<button class="vgrid__close" aria-label="Close">&#x2715;</button>' +
       '</div>' +
       '<div class="vgrid__body">' +
         '<div class="vgrid__grid">' +
           vidSlides.map((s, i) =>
-            `<button class="vgrid__card" data-idx="${i}" type="button">` +
+            `<button class="vgrid__card" data-idx="${i}" data-title="${(s.lightboxTitle || '').toLowerCase()}" type="button">` +
               `<div class="vgrid__thumb-wrap">` +
                 (s.thumbnail
                   ? `<img src="${s.thumbnail}" alt="" class="vgrid__thumb" loading="lazy">`
@@ -276,13 +282,49 @@ document.addEventListener('DOMContentLoaded', () => {
             `</button>`
           ).join('') +
         '</div>' +
+        '<p class="vgrid__empty" hidden>لا توجد نتائج</p>' +
       '</div>';
 
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => overlay.classList.add('is-open'));
 
+    const searchInput = overlay.querySelector('.vgrid__search');
+    const cards       = [...overlay.querySelectorAll('.vgrid__card')];
+    const emptyMsg    = overlay.querySelector('.vgrid__empty');
+    let searchTimer   = null;
+
+    const filterCards = query => {
+      const q = query.toLowerCase().trim();
+      let visible = 0;
+      cards.forEach(card => {
+        const match = !q || card.dataset.title.includes(q);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      emptyMsg.hidden = visible > 0;
+    };
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value;
+      filterCards(q);
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        const url = new URL(window.location);
+        if (q.trim()) url.searchParams.set('search', q);
+        else url.searchParams.delete('search');
+        history.replaceState(history.state, '', url);
+      }, 350);
+    });
+
+    if (initialSearch) { searchInput.value = initialSearch; filterCards(initialSearch); }
+
     const closeGrid = (keepOverflow = false) => {
+      // Clean search param from URL on close
+      const url = new URL(window.location);
+      url.searchParams.delete('search');
+      history.replaceState(history.state, '', url);
+
       overlay.classList.remove('is-open');
       setTimeout(() => {
         overlay.remove();
@@ -467,6 +509,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const btn = document.querySelector(`.sector-pill[data-sector="${CSS.escape(sector)}"]`);
       if (btn) { suppressHistory = true; btn.click(); suppressHistory = false; }
     });
+  }
+
+  // Auto-open video grid if ?search= is present in URL
+  const urlSearch = new URLSearchParams(window.location.search).get('search');
+  if (urlSearch) {
+    const vPanel = document.querySelector('[data-panel="v"]');
+    if (vPanel) setTimeout(() => openVideoGrid(vPanel, urlSearch), 150);
   }
 
 });
