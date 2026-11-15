@@ -1963,7 +1963,7 @@ section {
 .vgrid__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   padding: 20px 28px;
   border-bottom: 1px solid rgba(255, 255, 255, .1);
   flex-shrink: 0;
@@ -1973,6 +1973,7 @@ section {
   color: #fff;
   font-size: 18px;
   font-weight: 700;
+  flex-shrink: 0;
 }
 .vgrid__close {
   width: 36px;
