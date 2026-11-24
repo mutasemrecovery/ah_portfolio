@@ -34,6 +34,7 @@ $fields = [
     'cta_lead'       => ['label' => 'CTA Lead Text / نص CTA الرئيسي',              'en' => true, 'ar' => true],
     'cta_btn_text'   => ['label' => 'CTA Button Text / نص زر CTA',                 'en' => true, 'ar' => true],
     'cta_btn_link'   => ['label' => 'CTA Button Link / رابط زر CTA',               'en' => true, 'ar' => false],
+    'whatsapp_number'=> ['label' => 'WhatsApp Number / رقم واتساب (e.g. 962799000000)', 'en' => true, 'ar' => false],
 ];
 @endphp
 

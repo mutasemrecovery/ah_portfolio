@@ -278,7 +278,11 @@
   </div>
   <div class="cta__copy reveal">
     <p class="cta__lead">{{ $setting('cta_lead') ?: __('front.cta_lead') }}</p>
-    <a href="{{ $setting('cta_btn_link') ?: '#contact' }}" class="btn btn--navy btn--lg">
+    @php
+        $ctaWaNum = preg_replace('/[^0-9]/', '', $setting('whatsapp_number'));
+        $ctaHref  = $ctaWaNum ? 'https://wa.me/' . $ctaWaNum : ($setting('cta_btn_link') ?: '#contact');
+    @endphp
+    <a href="{{ $ctaHref }}" class="btn btn--navy btn--lg" @if($ctaWaNum) target="_blank" rel="noopener" @endif>
       {{ $setting('cta_btn_text') ?: __('front.cta_btn_text') }}
     </a>
   </div>

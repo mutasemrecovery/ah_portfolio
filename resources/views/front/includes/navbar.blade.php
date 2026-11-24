@@ -3,6 +3,8 @@
     $brandName   = isset($settings) ? (optional($settings['brand_name'] ?? null)->{'value_' . $locale} ?? 'AH.GROUP') : 'AH.GROUP';
     $logoPath    = isset($settings) ? (optional($settings['logo_image'] ?? null)->value_en ?? '') : '';
     $navAgencies = isset($agencies) ? $agencies : collect();
+    $waNum       = preg_replace('/[^0-9]/', '', optional($settings['whatsapp_number'] ?? null)->value_en ?? '');
+    $waUrl       = $waNum ? 'https://wa.me/' . $waNum : '#contact';
 @endphp
 
 <header class="nav" id="nav">
@@ -26,7 +28,7 @@
         </a>
       @endif
     @endforeach
-    <a href="#contact" class="btn btn--orange nav__cta">{{ __('front.nav_contact') }}</a>
+    <a href="{{ $waUrl }}" class="btn btn--orange nav__cta" @if($waNum) target="_blank" rel="noopener" @endif>{{ __('front.nav_contact') }}</a>
     <button class="nav__burger" id="burger" aria-label="{{ __('front.nav_menu_aria') }}"><span></span><span></span><span></span></button>
   </div>
 </header>
