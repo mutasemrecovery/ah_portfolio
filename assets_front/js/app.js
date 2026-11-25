@@ -212,17 +212,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let visibleCards = allCards;
     let idx = 0;
 
-    const show = i => {
-      if (visibleCards.length === 0) return;
-      idx = ((i % visibleCards.length) + visibleCards.length) % visibleCards.length;
+    const show = () => {
       allCards.forEach(c => c.classList.add('pdf-card--hidden'));
-      visibleCards[idx].classList.remove('pdf-card--hidden');
-      if (counter) counter.textContent = `${idx + 1} / ${visibleCards.length}`;
-      if (nav) nav.style.display = visibleCards.length > 1 ? '' : 'none';
+      visibleCards.forEach(c => c.classList.remove('pdf-card--hidden'));
+      if (nav) nav.style.display = 'none';
+      if (counter) counter.closest('.pdf-shelf__nav') && (counter.closest('.pdf-shelf__nav').style.display = 'none');
     };
-
-    shelf.querySelector('.pdf-shelf__btn--prev')?.addEventListener('click', () => show(idx - 1));
-    shelf.querySelector('.pdf-shelf__btn--next')?.addEventListener('click', () => show(idx + 1));
 
     let shelfSector = 'all';
     let shelfSearch = '';
@@ -385,6 +380,108 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  /* ---- Image grid overlay ---- */
+  const openImageGrid = (panel, initialSearch = '') => {
+    const imgSlides = (panel._slides || []).filter(
+      s => s.lightboxSrc && s.lightboxType === 'image'
+    );
+    if (imgSlides.length === 0 || !lbOpen) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'vgrid';
+
+    const igSectors = [...new Set(imgSlides.map(s => s.sector).filter(Boolean))].sort();
+    const sectorsBar = igSectors.length
+      ? '<div class="vgrid__sectors">' +
+          '<button class="vgrid__spill is-active" data-vsector="all">الكل</button>' +
+          igSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${sec}</button>`).join('') +
+        '</div>'
+      : '';
+
+    overlay.innerHTML =
+      '<div class="vgrid__header">' +
+        '<h3 class="vgrid__title">صور</h3>' +
+        '<div class="vgrid__search-wrap">' +
+          '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
+            '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
+          '</svg>' +
+          '<input type="search" class="vgrid__search" placeholder="ابحث عن صورة...">' +
+        '</div>' +
+        '<button class="vgrid__close" aria-label="Close">&#x2715;</button>' +
+      '</div>' +
+      sectorsBar +
+      '<div class="vgrid__body">' +
+        '<div class="vgrid__grid">' +
+          imgSlides.map((s, i) =>
+            `<button class="vgrid__card" data-idx="${i}" data-title="${(s.lightboxTitle || '').toLowerCase()}" data-sector="${s.sector || ''}" type="button">` +
+              `<div class="vgrid__thumb-wrap">` +
+                `<img src="${s.lightboxSrc}" alt="${s.lightboxTitle || ''}" class="vgrid__thumb" loading="lazy">` +
+                `<div class="vgrid__play">` +
+                  `<div class="vgrid__play-icon">` +
+                    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>` +
+                  `</div>` +
+                `</div>` +
+              `</div>` +
+              (s.lightboxTitle ? `<p class="vgrid__label">${s.lightboxTitle}</p>` : '') +
+            `</button>`
+          ).join('') +
+        '</div>' +
+        '<p class="vgrid__empty" hidden>لا توجد نتائج</p>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => overlay.classList.add('is-open'));
+
+    const searchInput = overlay.querySelector('.vgrid__search');
+    const cards       = [...overlay.querySelectorAll('.vgrid__card')];
+    const emptyMsg    = overlay.querySelector('.vgrid__empty');
+    const spills      = [...overlay.querySelectorAll('.vgrid__spill')];
+    let activeSector  = 'all';
+
+    const filterCards = (query, sector) => {
+      const q = (query || '').toLowerCase().trim();
+      if (sector !== undefined) activeSector = sector;
+      let visible = 0;
+      cards.forEach(card => {
+        const match = (!q || card.dataset.title.includes(q)) &&
+                      (activeSector === 'all' || card.dataset.sector === activeSector);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      emptyMsg.hidden = visible > 0;
+    };
+
+    spills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        spills.forEach(p => p.classList.remove('is-active'));
+        pill.classList.add('is-active');
+        filterCards(searchInput.value, pill.dataset.vsector);
+      });
+    });
+
+    searchInput.addEventListener('input', () => filterCards(searchInput.value));
+    if (initialSearch) { searchInput.value = initialSearch; filterCards(initialSearch); }
+
+    const closeGrid = () => {
+      overlay.classList.remove('is-open');
+      setTimeout(() => { overlay.remove(); document.body.style.overflow = ''; }, 260);
+    };
+
+    overlay.querySelector('.vgrid__close').addEventListener('click', closeGrid);
+    document.addEventListener('keydown', function escGrid(e) {
+      if (e.key === 'Escape') { closeGrid(); document.removeEventListener('keydown', escGrid); }
+    });
+
+    overlay.querySelectorAll('.vgrid__card').forEach(card => {
+      card.addEventListener('click', () => {
+        const startIdx = parseInt(card.dataset.idx);
+        closeGrid();
+        setTimeout(() => lbOpen(imgSlides.map(slideToFakePhone), startIdx), 270);
+      });
+    });
+  };
+
   /* ---- Lightbox with prev/next navigation ---- */
   (() => {
     const overlay = document.createElement('div');
@@ -477,11 +574,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = e.target.closest('.phone[data-lightbox-src], .pdf-card[data-lightbox-src]');
       if (!target) return;
 
-      // Video phones → open grid gallery instead of direct lightbox
+      // Video phones → open video grid
       if (target.classList.contains('phone') &&
           (target.dataset.lightboxType === 'youtube' || target.dataset.lightboxType === 'video')) {
         const vPanel = target.closest('[data-panel="v"]');
         if (vPanel) { openVideoGrid(vPanel); return; }
+      }
+
+      // Image phones → open image grid
+      if (target.classList.contains('phone') && target.dataset.lightboxType === 'image') {
+        const iPanel = target.closest('[data-panel="i"]');
+        if (iPanel) { openImageGrid(iPanel); return; }
       }
 
       const panel    = target.closest('[data-panel]');
