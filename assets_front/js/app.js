@@ -487,6 +487,106 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  /* ---- Website grid overlay ---- */
+  const openWebsiteGrid = (panel) => {
+    const webSlides = (panel._slides || []).filter(s => s.lightboxSrc && s.lightboxType === 'website');
+    if (webSlides.length === 0) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'vgrid';
+
+    const wgSectors = [...new Set(webSlides.map(s => s.sector).filter(Boolean))].sort();
+    const sectorsBar = wgSectors.length
+      ? '<div class="vgrid__sectors">' +
+          '<button class="vgrid__spill is-active" data-vsector="all">الكل</button>' +
+          wgSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${sec}</button>`).join('') +
+        '</div>'
+      : '';
+
+    overlay.innerHTML =
+      '<div class="vgrid__header">' +
+        '<h3 class="vgrid__title">مواقع</h3>' +
+        '<div class="vgrid__search-wrap">' +
+          '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
+            '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
+          '</svg>' +
+          '<input type="search" class="vgrid__search" placeholder="ابحث عن موقع...">' +
+        '</div>' +
+        '<button class="vgrid__close" aria-label="Close">&#x2715;</button>' +
+      '</div>' +
+      sectorsBar +
+      '<div class="vgrid__body">' +
+        '<div class="vgrid__grid">' +
+          webSlides.map((s, i) => {
+            const domain = s.domain || s.lightboxSrc.replace(/^https?:\/\//, '').split('/')[0];
+            const thumb  = s.thumbnail
+              ? `<img src="${s.thumbnail}" alt="${s.lightboxTitle || ''}" class="vgrid__thumb" loading="lazy">`
+              : `<div class="vgrid__thumb vgrid__thumb--site">` +
+                  `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>` +
+                  `<span class="vgrid__site-domain">${domain}</span>` +
+                `</div>`;
+            return `<a class="vgrid__card" data-idx="${i}" data-title="${(s.lightboxTitle || domain).toLowerCase()}" data-sector="${s.sector || ''}" href="${s.lightboxSrc}" target="_blank" rel="noopener">` +
+              `<div class="vgrid__thumb-wrap">${thumb}` +
+                `<div class="vgrid__play">` +
+                  `<div class="vgrid__play-icon">` +
+                    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>` +
+                  `</div>` +
+                `</div>` +
+              `</div>` +
+              (s.lightboxTitle ? `<p class="vgrid__label">${s.lightboxTitle}</p>` : `<p class="vgrid__label">${domain}</p>`) +
+            `</a>`;
+          }).join('') +
+        '</div>' +
+        '<p class="vgrid__empty" hidden>لا توجد نتائج</p>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => overlay.classList.add('is-open'));
+
+    const searchInput = overlay.querySelector('.vgrid__search');
+    const cards       = [...overlay.querySelectorAll('.vgrid__card')];
+    const emptyMsg    = overlay.querySelector('.vgrid__empty');
+    const spills      = [...overlay.querySelectorAll('.vgrid__spill')];
+    let activeSector  = 'all';
+
+    const filterCards = (query, sector) => {
+      const q = (query || '').toLowerCase().trim();
+      if (sector !== undefined) activeSector = sector;
+      let visible = 0;
+      cards.forEach(card => {
+        const match = (!q || card.dataset.title.includes(q)) &&
+                      (activeSector === 'all' || card.dataset.sector === activeSector);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      emptyMsg.hidden = visible > 0;
+    };
+
+    spills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        spills.forEach(p => p.classList.remove('is-active'));
+        pill.classList.add('is-active');
+        filterCards(searchInput.value, pill.dataset.vsector);
+      });
+    });
+
+    searchInput.addEventListener('input', () => filterCards(searchInput.value));
+
+    const closeGrid = () => {
+      overlay.classList.remove('is-open');
+      setTimeout(() => { overlay.remove(); document.body.style.overflow = ''; }, 260);
+    };
+
+    overlay.querySelector('.vgrid__close').addEventListener('click', closeGrid);
+    document.addEventListener('keydown', function escGrid(e) {
+      if (e.key === 'Escape') { closeGrid(); document.removeEventListener('keydown', escGrid); }
+    });
+
+    // links open in new tab natively — just close grid on click
+    cards.forEach(card => card.addEventListener('click', () => setTimeout(closeGrid, 80)));
+  };
+
   /* ---- Lightbox with prev/next navigation ---- */
   (() => {
     const overlay = document.createElement('div');
@@ -590,6 +690,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (target.classList.contains('phone') && target.dataset.lightboxType === 'image') {
         const iPanel = target.closest('[data-panel="i"]');
         if (iPanel) { openImageGrid(iPanel); return; }
+      }
+
+      // Website phones → open website grid
+      if (target.classList.contains('phone') && target.dataset.lightboxType === 'website') {
+        const wPanel = target.closest('[data-panel="w"]');
+        if (wPanel) { openWebsiteGrid(wPanel); return; }
       }
 
       const panel    = target.closest('[data-panel]');
