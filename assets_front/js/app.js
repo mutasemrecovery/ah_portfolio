@@ -212,12 +212,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let visibleCards = allCards;
     let idx = 0;
 
-    const show = () => {
+    const show = i => {
+      if (visibleCards.length === 0) return;
+      idx = ((i % visibleCards.length) + visibleCards.length) % visibleCards.length;
       allCards.forEach(c => c.classList.add('pdf-card--hidden'));
-      visibleCards.forEach(c => c.classList.remove('pdf-card--hidden'));
-      if (nav) nav.style.display = 'none';
-      if (counter) counter.closest('.pdf-shelf__nav') && (counter.closest('.pdf-shelf__nav').style.display = 'none');
+      visibleCards[idx].classList.remove('pdf-card--hidden');
+      if (counter) counter.textContent = `${idx + 1} / ${visibleCards.length}`;
+      if (nav) nav.style.display = visibleCards.length > 1 ? '' : 'none';
     };
+
+    shelf.querySelector('.pdf-shelf__btn--prev')?.addEventListener('click', () => show(idx - 1));
+    shelf.querySelector('.pdf-shelf__btn--next')?.addEventListener('click', () => show(idx + 1));
 
     let shelfSector = 'all';
     let shelfSearch = '';

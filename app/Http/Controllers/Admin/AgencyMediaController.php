@@ -97,7 +97,7 @@ class AgencyMediaController extends Controller
             'title_en'   => 'nullable|string|max:300',
             'title_ar'   => 'nullable|string|max:300',
             'url'        => 'nullable|string|max:500',
-            'file'       => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,webm|max:20480',
+            'file'       => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,webm,pdf|max:51200',
             'thumbnail'  => 'nullable|image|max:2048',
             'sort_order' => 'nullable|integer|min:0',
             'sector'     => 'nullable|string|max:100',

@@ -915,13 +915,12 @@ section {
    9. PDF CARDS (Visual Identity)
    ───────────────────────────────────────────────────────────── */
 .pdf-shelf {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  gap: 24px;
-  padding: 12px 0 24px;
+  gap: 20px;
+  min-height: 420px;
+  justify-content: center;
 }
 
 /* Single document card */
@@ -1059,9 +1058,12 @@ section {
   line-height: 1.4;
 }
 
-/* Navigation — hidden since all cards now show at once */
+/* Navigation */
 .pdf-shelf__nav {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
 }
 
 .pdf-shelf__btn {

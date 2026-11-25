@@ -67,11 +67,35 @@
                 <input type="text" name="title_ar" value="{{ old('title_ar', $medium->title_ar) }}" class="form-control" dir="rtl">
             </div>
             <div class="col-12">
-                <label class="form-label">ملف جديد (صورة / فيديو)</label>
+                <label class="form-label">ملف جديد (صورة / فيديو / PDF)</label>
                 @if($medium->file_path)
-                <div class="mb-2 small text-muted">الملف الحالي: <a href="{{ asset($medium->file_path) }}" target="_blank">عرض</a></div>
+                @php
+                    $ext = strtolower(pathinfo($medium->file_path, PATHINFO_EXTENSION));
+                    $isImg = in_array($ext, ['jpg','jpeg','png','gif','webp']);
+                    $isPdf = $ext === 'pdf';
+                @endphp
+                <div class="mb-2">
+                    @if($isImg)
+                        <img src="{{ asset($medium->file_path) }}" alt=""
+                             class="img-thumbnail d-block"
+                             style="max-height:160px;max-width:280px;object-fit:contain;background:#f8f9fa;">
+                    @elseif($isPdf)
+                        <div class="d-flex align-items-center gap-2 p-2 rounded border bg-light" style="max-width:320px;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e53935" stroke-width="1.6">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <div>
+                                <div class="small fw-semibold">{{ basename($medium->file_path) }}</div>
+                                <a href="{{ asset($medium->file_path) }}" target="_blank" class="small text-primary">فتح الملف</a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="small text-muted">الملف الحالي: <a href="{{ asset($medium->file_path) }}" target="_blank">{{ basename($medium->file_path) }}</a></div>
+                    @endif
+                </div>
                 @endif
-                <input type="file" name="file" class="form-control" accept="image/*,video/*">
+                <input type="file" name="file" class="form-control" accept="image/*,video/*,application/pdf,.pdf">
                 <small class="text-muted">اترك فارغاً للإبقاء على الملف الحالي</small>
             </div>
             <div class="col-12">
