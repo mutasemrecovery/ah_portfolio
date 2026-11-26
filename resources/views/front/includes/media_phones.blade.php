@@ -7,9 +7,16 @@
   @endif
 </div>
 
+{{-- Sector English lookup map --}}
+@php
+$sectorEnMap = isset($allSectors)
+    ? $allSectors->pluck('name_en', 'name')->toArray()
+    : [];
+@endphp
+
 {{-- Videos panel --}}
 @php
-$allVSlides = $videos->map(function($v) use ($locale) {
+$allVSlides = $videos->map(function($v) use ($locale, $sectorEnMap) {
     $isYt  = $v->url && preg_match('/youtube\.com|youtu\.be/i', $v->url);
     $thumb = $v->thumbnail
         ? (str_starts_with($v->thumbnail, 'http') ? $v->thumbnail : asset($v->thumbnail))
@@ -25,6 +32,7 @@ $allVSlides = $videos->map(function($v) use ($locale) {
         'lightboxTitle'  => $v->{'title_' . $locale} ?? '',
         'href'           => '',
         'sector'         => $v->sector ?? '',
+        'sector_en'      => $sectorEnMap[$v->sector ?? ''] ?? '',
     ];
 })->filter(fn($s) => $s['lightboxSrc'])->values()->toArray();
 @endphp
@@ -67,7 +75,7 @@ $allVSlides = $videos->map(function($v) use ($locale) {
 
 {{-- Images panel --}}
 @php
-$allISlides = $images->filter(fn($v) => $v->file_path)->map(function($v) use ($locale) {
+$allISlides = $images->filter(fn($v) => $v->file_path)->map(function($v) use ($locale, $sectorEnMap) {
     return [
         'thumbnail'      => asset($v->file_path),
         'lightboxType'   => 'image',
@@ -76,6 +84,7 @@ $allISlides = $images->filter(fn($v) => $v->file_path)->map(function($v) use ($l
         'lightboxTitle'  => $v->{'title_' . $locale} ?? '',
         'href'           => '',
         'sector'         => $v->sector ?? '',
+        'sector_en'      => $sectorEnMap[$v->sector ?? ''] ?? '',
     ];
 })->values()->toArray();
 @endphp
@@ -147,7 +156,7 @@ $allISlides = $images->filter(fn($v) => $v->file_path)->map(function($v) use ($l
 
 {{-- Websites panel --}}
 @php
-$allWSlides = $websites->filter(fn($v) => $v->url)->map(function($v) use ($locale) {
+$allWSlides = $websites->filter(fn($v) => $v->url)->map(function($v) use ($locale, $sectorEnMap) {
     $thumb  = $v->thumbnail
         ? (str_starts_with($v->thumbnail, 'http') ? $v->thumbnail : asset($v->thumbnail))
         : null;
@@ -161,6 +170,7 @@ $allWSlides = $websites->filter(fn($v) => $v->url)->map(function($v) use ($local
         'lightboxTitle'  => $v->{'title_' . $locale} ?? '',
         'href'           => $v->url,
         'sector'         => $v->sector ?? '',
+        'sector_en'      => $sectorEnMap[$v->sector ?? ''] ?? '',
     ];
 })->values()->toArray();
 @endphp

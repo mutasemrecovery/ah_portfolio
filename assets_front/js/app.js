@@ -271,11 +271,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.createElement('div');
     overlay.className = 'vgrid';
 
+    const vgridSectorMap = {};
+    vidSlides.forEach(s => { if (s.sector) vgridSectorMap[s.sector] = s.sector_en || s.sector; });
     const vgridSectors = [...new Set(vidSlides.map(s => s.sector).filter(Boolean))].sort();
     const sectorsBar = vgridSectors.length
       ? '<div class="vgrid__sectors">' +
-          '<button class="vgrid__spill is-active" data-vsector="all">الكل</button>' +
-          vgridSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${sec}</button>`).join('') +
+          `<button class="vgrid__spill is-active" data-vsector="all">${isAr ? 'الكل' : 'All'}</button>` +
+          vgridSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${isAr ? sec : (vgridSectorMap[sec] || sec)}</button>`).join('') +
         '</div>'
       : '';
 
@@ -397,11 +399,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.createElement('div');
     overlay.className = 'vgrid';
 
+    const igSectorMap = {};
+    imgSlides.forEach(s => { if (s.sector) igSectorMap[s.sector] = s.sector_en || s.sector; });
     const igSectors = [...new Set(imgSlides.map(s => s.sector).filter(Boolean))].sort();
     const sectorsBar = igSectors.length
       ? '<div class="vgrid__sectors">' +
-          '<button class="vgrid__spill is-active" data-vsector="all">الكل</button>' +
-          igSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${sec}</button>`).join('') +
+          `<button class="vgrid__spill is-active" data-vsector="all">${isAr ? 'الكل' : 'All'}</button>` +
+          igSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${isAr ? sec : (igSectorMap[sec] || sec)}</button>`).join('') +
         '</div>'
       : '';
 
@@ -497,11 +501,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.createElement('div');
     overlay.className = 'vgrid';
 
+    const wgSectorMap = {};
+    webSlides.forEach(s => { if (s.sector) wgSectorMap[s.sector] = s.sector_en || s.sector; });
     const wgSectors = [...new Set(webSlides.map(s => s.sector).filter(Boolean))].sort();
     const sectorsBar = wgSectors.length
       ? '<div class="vgrid__sectors">' +
-          '<button class="vgrid__spill is-active" data-vsector="all">الكل</button>' +
-          wgSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${sec}</button>`).join('') +
+          `<button class="vgrid__spill is-active" data-vsector="all">${isAr ? 'الكل' : 'All'}</button>` +
+          wgSectors.map(sec => `<button class="vgrid__spill" data-vsector="${sec}">${isAr ? sec : (wgSectorMap[sec] || sec)}</button>`).join('') +
         '</div>'
       : '';
 
