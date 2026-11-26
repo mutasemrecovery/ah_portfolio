@@ -37,7 +37,7 @@ return [
 
     // ── Showcase tabs ─────────────────────────────────────────────
     'tab_videos'        => 'فيديوهات',
-    'tab_images'        => 'صور',
+    'tab_images'        => 'تصاميمنا',
     'tab_visual_identity' => 'Visual Identity',
     'tab_websites'      => 'مواقع',
 
