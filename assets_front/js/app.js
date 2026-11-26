@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     overlay.innerHTML =
       '<div class="vgrid__header">' +
-        '<h3 class="vgrid__title">فيديوهات</h3>' +
+        '<h3 class="vgrid__title">فيديوهات <span class="vgrid__title-en">Videos</span></h3>' +
         '<div class="vgrid__search-wrap">' +
           '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
             '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
@@ -405,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     overlay.innerHTML =
       '<div class="vgrid__header">' +
-        '<h3 class="vgrid__title">صور</h3>' +
+        '<h3 class="vgrid__title">تصاميمنا <span class="vgrid__title-en">Our Designs</span></h3>' +
         '<div class="vgrid__search-wrap">' +
           '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
             '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
@@ -505,7 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     overlay.innerHTML =
       '<div class="vgrid__header">' +
-        '<h3 class="vgrid__title">مواقع</h3>' +
+        '<h3 class="vgrid__title">مواقع <span class="vgrid__title-en">Websites</span></h3>' +
         '<div class="vgrid__search-wrap">' +
           '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
             '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
