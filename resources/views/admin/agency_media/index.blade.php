@@ -84,9 +84,11 @@
                                 <select name="sector" class="sector-inline" onchange="this.form.submit()" title="تغيير القطاع">
                                     <option value="">— بلا —</option>
                                     @foreach($sectors as $s)
-                                        <option value="{{ $s }}" {{ $item->sector === $s ? 'selected' : '' }}>{{ $s }}</option>
+                                        <option value="{{ $s->name }}" {{ $item->sector === $s->name ? 'selected' : '' }}>
+                                            {{ $s->name }}{{ $s->name_en ? ' / ' . $s->name_en : '' }}
+                                        </option>
                                     @endforeach
-                                    @if($item->sector && !$sectors->contains($item->sector))
+                                    @if($item->sector && !$sectors->contains('name', $item->sector))
                                         <option value="{{ $item->sector }}" selected>{{ $item->sector }}</option>
                                     @endif
                                 </select>

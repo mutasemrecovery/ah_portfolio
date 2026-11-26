@@ -16,8 +16,11 @@ class SectorController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|string|max:100|unique:sectors,name']);
-        Sector::create(['name' => trim($request->name)]);
+        $request->validate([
+            'name'    => 'required|string|max:100|unique:sectors,name',
+            'name_en' => 'nullable|string|max:100',
+        ]);
+        Sector::create(['name' => trim($request->name), 'name_en' => trim($request->name_en ?? '')]);
         return back()->with('success', 'تم إضافة القطاع.');
     }
 

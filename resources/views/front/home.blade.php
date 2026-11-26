@@ -168,7 +168,8 @@
     <div class="sector-filter__pills" role="group">
       <button class="sector-pill is-active" data-sector="all">{{ __('front.sector_all') }}</button>
       @foreach($allSectors as $sector)
-        <button class="sector-pill" data-sector="{{ $sector }}">{{ $sector }}</button>
+        @php $sectorLabel = $locale === 'ar' ? $sector->name : ($sector->name_en ?: $sector->name); @endphp
+        <button class="sector-pill" data-sector="{{ $sector->name }}">{{ $sectorLabel }}</button>
       @endforeach
     </div>
     <div class="sector-search-wrap">

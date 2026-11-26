@@ -12,7 +12,7 @@ class AgencyMediaController extends Controller
 {
     private function sectors(): \Illuminate\Support\Collection
     {
-        return Sector::orderBy('name')->pluck('name');
+        return Sector::orderBy('name')->get(['name', 'name_en']);
     }
 
     public function index(Agency $agency)

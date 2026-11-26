@@ -33,13 +33,20 @@
                 <form action="{{ route('admin.sectors.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label">اسم القطاع <span class="text-danger">*</span></label>
+                        <label class="form-label">الاسم بالعربي <span class="text-danger">*</span></label>
                         <input type="text" name="name" value="{{ old('name') }}"
                                class="form-control @error('name') is-invalid @enderror"
-                               placeholder="مثال: مطاعم، مطابخ، عيادات، مراكز لياقة...">
+                               dir="rtl" placeholder="مثال: مطاعم، مطابخ، عيادات...">
                         @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        <small class="text-muted">سيظهر كزر فلتر في الموقع لما تضيفه على الأعمال</small>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">الاسم بالإنجليزي</label>
+                        <input type="text" name="name_en" value="{{ old('name_en') }}"
+                               class="form-control @error('name_en') is-invalid @enderror"
+                               placeholder="e.g. Restaurants, Kitchens, Clinics...">
+                        @error('name_en')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                    <small class="text-muted d-block mb-3">سيظهر كزر فلتر في الموقع باللغة المناسبة للزائر</small>
                     <button type="submit" class="btn-primary-sm w-100">
                         <i class="bi bi-plus-lg"></i> إضافة
                     </button>
@@ -60,7 +67,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>اسم القطاع</th>
+                            <th>عربي</th>
+                            <th>English</th>
                             <th>الإجراءات</th>
                         </tr>
                     </thead>
@@ -68,9 +76,8 @@
                         @forelse($sectors as $sector)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>
-                                <span class="pill pill-neutral" style="font-size:13px">{{ $sector->name }}</span>
-                            </td>
+                            <td><span class="pill pill-neutral" style="font-size:13px">{{ $sector->name }}</span></td>
+                            <td><span class="text-muted" style="font-size:13px">{{ $sector->name_en ?: '—' }}</span></td>
                             <td>
                                 <form action="{{ route('admin.sectors.destroy', $sector) }}"
                                       method="POST" class="d-inline"
@@ -84,7 +91,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="3" class="text-center text-muted py-5">
+                            <td colspan="4" class="text-center text-muted py-5">
                                 <i class="bi bi-tags fs-4 d-block mb-2"></i>
                                 لا توجد قطاعات بعد — أضف أول قطاع من النموذج
                             </td>

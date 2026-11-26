@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sector extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'name_en'];
 }

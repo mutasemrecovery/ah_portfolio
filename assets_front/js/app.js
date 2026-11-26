@@ -3,6 +3,8 @@
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
 
+  const isAr = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+
   /* ---- Nav: shadow on scroll ---- */
   const nav = document.getElementById('nav');
   const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
@@ -279,12 +281,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     overlay.innerHTML =
       '<div class="vgrid__header">' +
-        '<h3 class="vgrid__title">فيديوهات <span class="vgrid__title-en">Videos</span></h3>' +
+        `<h3 class="vgrid__title">${isAr ? 'فيديوهات' : 'Videos'}</h3>` +
         '<div class="vgrid__search-wrap">' +
           '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
             '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
           '</svg>' +
-          '<input type="search" class="vgrid__search" placeholder="ابحث عن فيديو...">' +
+          `<input type="search" class="vgrid__search" placeholder="${isAr ? 'ابحث عن فيديو...' : 'Search videos...'}">` +
         '</div>' +
         '<button class="vgrid__close" aria-label="Close">&#x2715;</button>' +
       '</div>' +
@@ -405,12 +407,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     overlay.innerHTML =
       '<div class="vgrid__header">' +
-        '<h3 class="vgrid__title">تصاميمنا <span class="vgrid__title-en">Our Designs</span></h3>' +
+        `<h3 class="vgrid__title">${isAr ? 'تصاميمنا' : 'Our Designs'}</h3>` +
         '<div class="vgrid__search-wrap">' +
           '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
             '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
           '</svg>' +
-          '<input type="search" class="vgrid__search" placeholder="ابحث عن صورة...">' +
+          `<input type="search" class="vgrid__search" placeholder="${isAr ? 'ابحث عن تصميم...' : 'Search designs...'}">` +
         '</div>' +
         '<button class="vgrid__close" aria-label="Close">&#x2715;</button>' +
       '</div>' +
@@ -505,12 +507,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     overlay.innerHTML =
       '<div class="vgrid__header">' +
-        '<h3 class="vgrid__title">مواقع <span class="vgrid__title-en">Websites</span></h3>' +
+        `<h3 class="vgrid__title">${isAr ? 'مواقع' : 'Websites'}</h3>` +
         '<div class="vgrid__search-wrap">' +
           '<svg class="vgrid__search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
             '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
           '</svg>' +
-          '<input type="search" class="vgrid__search" placeholder="ابحث عن موقع...">' +
+          `<input type="search" class="vgrid__search" placeholder="${isAr ? 'ابحث عن موقع...' : 'Search websites...'}">` +
         '</div>' +
         '<button class="vgrid__close" aria-label="Close">&#x2715;</button>' +
       '</div>' +

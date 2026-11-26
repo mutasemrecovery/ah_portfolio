@@ -42,7 +42,7 @@
                        placeholder="مثال: مطاعم، مطابخ، عيادات...">
                 <datalist id="sectors-datalist">
                     @foreach($sectors as $s)
-                        <option value="{{ $s }}">
+                        <option value="{{ $s->name }}">{{ $s->name }}{{ $s->name_en ? ' / '.$s->name_en : '' }}</option>
                     @endforeach
                 </datalist>
                 <small class="text-muted">اختر من القائمة أو اكتب قطاعاً جديداً</small>
