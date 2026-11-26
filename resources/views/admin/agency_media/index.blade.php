@@ -48,7 +48,8 @@
                     <tr>
                         <th>#</th>
                         <th>النوع</th>
-                        <th>العنوان</th>
+                        <th>العنوان (EN)</th>
+                        <th>العنوان (AR)</th>
                         <th>الملف / URL</th>
                         <th>القطاع</th>
                         <th>الحالة</th>
@@ -66,7 +67,8 @@
                             @endphp
                             <span class="pill {{ $badges[$item->type] ?? 'pill-neutral' }}">{{ $labels[$item->type] ?? ucfirst($item->type) }}</span>
                         </td>
-                        <td>{{ $item->title_en ?: ($item->title_ar ?: '—') }}</td>
+                        <td>{{ $item->title_en ?: '—' }}</td>
+                        <td dir="rtl">{{ $item->title_ar ?: '—' }}</td>
                         <td>
                             @if($item->url)
                                 <a href="{{ $item->url }}" target="_blank" class="text-primary small">
@@ -116,11 +118,12 @@
                     </tr>
                     @empty
                     <tr id="empty-row">
-                        <td colspan="7" class="text-center text-muted py-4">
+                        <td colspan="8" class="text-center text-muted py-4">
                             <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                             لا توجد أعمال
                         </td>
                     </tr>
+
                     @endforelse
                 </tbody>
             </table>
