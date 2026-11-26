@@ -24,7 +24,7 @@
   <div class="hero__copy reveal">
     <h1 class="display">{{ $hero?->{'title_' . $locale} ?? $hero?->title_en ?? __('front.hero_title') }}</h1>
     <p class="hero__sub">{{ $hero?->{'subtitle_' . $locale} ?? $hero?->subtitle_en ?? __('front.hero_subtitle') }}</p>
-    <a href="#sector-filter" class="btn btn--orange btn--lg" onclick="event.preventDefault();document.getElementById('sector-filter')?.scrollIntoView({behavior:'smooth'})">
+    <a href="#portfolio" class="btn btn--orange btn--lg" onclick="event.preventDefault();document.querySelector('[data-agency-section]')?.scrollIntoView({behavior:'smooth'})">
       {{ $locale === 'ar' ? 'استكشف معرض أعمالنا' : 'Explore Our Portfolio' }}
     </a>
   </div>
